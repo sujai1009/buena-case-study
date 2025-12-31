@@ -10,12 +10,34 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const typeorm_1 = require("@nestjs/typeorm");
+const config_1 = require("@nestjs/config");
+const database_configuration_1 = require("./config/database.configuration");
+const property_module_1 = require("./property/property.module");
+const unit_module_1 = require("./unit/unit.module");
+const building_module_1 = require("./building/building.module");
+const user_module_1 = require("./user/user.module");
+const address_module_1 = require("./address/address.module");
+const ENV = process.env.NODE_ENV?.trim();
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
+        imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+                envFilePath: ['.env', `.env.${ENV}`],
+            }),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                useClass: database_configuration_1.DatabaseConfiguration,
+            }),
+            property_module_1.PropertyModule,
+            unit_module_1.UnitModule,
+            building_module_1.BuildingModule,
+            user_module_1.UserModule,
+            address_module_1.AddressModule
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
