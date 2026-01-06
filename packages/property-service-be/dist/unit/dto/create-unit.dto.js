@@ -11,8 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUnitDto = void 0;
 const class_validator_1 = require("class-validator");
+const entrance_type_1 = require("../entities/entrance.type");
 const unit_status_1 = require("../entities/unit.status");
 const unit_type_1 = require("../entities/unit.type");
+const swagger_1 = require("@nestjs/swagger");
 class CreateUnitDto {
     buildingId;
     tenantId;
@@ -28,27 +30,53 @@ class CreateUnitDto {
 }
 exports.CreateUnitDto = CreateUnitDto;
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreateUnitDto.prototype, "buildingId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUnitDto.prototype, "tenantId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreateUnitDto.prototype, "type", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreateUnitDto.prototype, "uNo", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateUnitDto.prototype, "floor", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUnitDto.prototype, "entrance", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreateUnitDto.prototype, "size", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUnitDto.prototype, "coOwnershipShare", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUnitDto.prototype, "builtYear", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreateUnitDto.prototype, "rooms", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUnitDto.prototype, "status", void 0);
 //# sourceMappingURL=create-unit.dto.js.map

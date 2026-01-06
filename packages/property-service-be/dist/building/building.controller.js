@@ -18,7 +18,7 @@ const building_service_1 = require("./building.service");
 const create_building_dto_1 = require("./dto/create-building.dto");
 const update_building_dto_1 = require("./dto/update-building.dto");
 const swagger_1 = require("@nestjs/swagger");
-const pagination_request_dto_1 = require("../common/pagination-request-dto");
+const building_page_request_dto_1 = require("./dto/building-page-request-dto");
 let BuildingController = class BuildingController {
     buildingService;
     constructor(buildingService) {
@@ -27,8 +27,8 @@ let BuildingController = class BuildingController {
     create(createBuildingDto) {
         return this.buildingService.create(createBuildingDto);
     }
-    findAll(paginationRequest) {
-        return this.buildingService.findAll(paginationRequest);
+    findAll(buildingPage) {
+        return this.buildingService.findAll(buildingPage);
     }
     findOne(id) {
         return this.buildingService.findOne(+id);
@@ -36,7 +36,11 @@ let BuildingController = class BuildingController {
     update(id, updateBuildingDto) {
         return this.buildingService.update(+id, updateBuildingDto);
     }
+    updateMany(updateBuildingDtos) {
+        return this.buildingService.updateMany(updateBuildingDtos);
+    }
     remove(id) {
+        console.log("Deleted sucessfully");
         return this.buildingService.remove(+id);
     }
 };
@@ -58,7 +62,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [pagination_request_dto_1.PaginationRequest]),
+    __metadata("design:paramtypes", [building_page_request_dto_1.BuildingPageReq]),
     __metadata("design:returntype", void 0)
 ], BuildingController.prototype, "findAll", null);
 __decorate([
@@ -75,7 +79,7 @@ __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'update building details' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
-    (0, swagger_1.ApiBody)({ type: create_building_dto_1.CreateBuildingDto }),
+    (0, swagger_1.ApiBody)({ type: update_building_dto_1.UpdateBuildingDto }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -83,10 +87,19 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BuildingController.prototype, "update", null);
 __decorate([
+    (0, common_1.Put)(),
+    (0, swagger_1.ApiOperation)({ summary: 'update all building details' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
+    (0, swagger_1.ApiBody)({ type: update_building_dto_1.UpdateBuildingDto }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", void 0)
+], BuildingController.prototype, "updateMany", null);
+__decorate([
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete building by id' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
-    (0, swagger_1.ApiBody)({ type: create_building_dto_1.CreateBuildingDto }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

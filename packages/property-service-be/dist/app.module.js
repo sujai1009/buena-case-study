@@ -18,6 +18,11 @@ const unit_module_1 = require("./unit/unit.module");
 const building_module_1 = require("./building/building.module");
 const user_module_1 = require("./user/user.module");
 const address_module_1 = require("./address/address.module");
+const core_1 = require("@nestjs/core");
+const global_error_handler_1 = require("./config/global.error.handler");
+const file_module_1 = require("./file/file.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 const ENV = process.env.NODE_ENV?.trim();
 let AppModule = class AppModule {
 };
@@ -32,14 +37,21 @@ exports.AppModule = AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRootAsync({
                 useClass: database_configuration_1.DatabaseConfiguration,
             }),
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..'),
+            }),
             property_module_1.PropertyModule,
             unit_module_1.UnitModule,
             building_module_1.BuildingModule,
             user_module_1.UserModule,
-            address_module_1.AddressModule
+            address_module_1.AddressModule,
+            file_module_1.FileModule
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [{
+                provide: core_1.APP_FILTER,
+                useClass: global_error_handler_1.GlobalExceptionFilter,
+            }, app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

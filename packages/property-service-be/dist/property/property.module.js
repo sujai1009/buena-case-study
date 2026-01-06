@@ -15,12 +15,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const user_module_1 = require("../user/user.module");
 const address_module_1 = require("../address/address.module");
 const building_module_1 = require("../building/building.module");
+const file_module_1 = require("../file/file.module");
 let PropertyModule = class PropertyModule {
 };
 exports.PropertyModule = PropertyModule;
 exports.PropertyModule = PropertyModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([property_entity_1.Property]), (0, common_1.forwardRef)(() => building_module_1.BuildingModule), user_module_1.UserModule, address_module_1.AddressModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([property_entity_1.Property]), (0, common_1.forwardRef)(() => building_module_1.BuildingModule), user_module_1.UserModule, address_module_1.AddressModule, file_module_1.FileModule],
         controllers: [property_controller_1.PropertyController],
         providers: [property_service_1.PropertyService],
         exports: [typeorm_1.TypeOrmModule, property_service_1.PropertyService]

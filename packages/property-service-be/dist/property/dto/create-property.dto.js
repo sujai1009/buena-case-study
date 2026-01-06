@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreatePropertyDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const property_type_1 = require("../entities/property.type");
 const class_validator_1 = require("class-validator");
 class CreatePropertyDto {
@@ -17,6 +18,7 @@ class CreatePropertyDto {
     type;
     manager;
     accountant;
+    fileId;
     isbulkCreation = false;
     totalBuildings;
     street;
@@ -26,19 +28,53 @@ class CreatePropertyDto {
 }
 exports.CreatePropertyDto = CreatePropertyDto;
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreatePropertyDto.prototype, "name", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEnum)(property_type_1.PropertyType),
     __metadata("design:type", Number)
 ], CreatePropertyDto.prototype, "type", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreatePropertyDto.prototype, "manager", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreatePropertyDto.prototype, "accountant", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], CreatePropertyDto.prototype, "fileId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Boolean)
+], CreatePropertyDto.prototype, "isbulkCreation", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreatePropertyDto.prototype, "totalBuildings", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreatePropertyDto.prototype, "street", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreatePropertyDto.prototype, "city", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreatePropertyDto.prototype, "country", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreatePropertyDto.prototype, "zipcode", void 0);
 //# sourceMappingURL=create-property.dto.js.map

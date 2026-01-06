@@ -33,40 +33,70 @@ let Unit = class Unit extends base_id_1.BaseId {
 exports.Unit = Unit;
 __decorate([
     (0, typeorm_1.Column)({
-        nullable: false
+        type: 'int',
+        nullable: true,
+        transformer: {
+            to: (value) => value,
+            from: (value) => unit_type_1.UnitType[value],
+        },
     }),
     __metadata("design:type", Number)
 ], Unit.prototype, "type", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true
+    }),
     __metadata("design:type", Number)
 ], Unit.prototype, "uNo", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true
+    }),
     __metadata("design:type", String)
 ], Unit.prototype, "floor", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        type: 'int',
+        nullable: true,
+        transformer: {
+            to: (value) => value,
+            from: (value) => entrance_type_1.EntranceType[value],
+        },
+    }),
     __metadata("design:type", Number)
 ], Unit.prototype, "entrance", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true
+    }),
     __metadata("design:type", Number)
 ], Unit.prototype, "size", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true
+    }),
     __metadata("design:type", Number)
 ], Unit.prototype, "coOwnershipShare", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true
+    }),
     __metadata("design:type", Number)
 ], Unit.prototype, "builtYear", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true
+    }),
     __metadata("design:type", Number)
 ], Unit.prototype, "rooms", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        type: 'int',
+        transformer: {
+            to: (value) => value,
+            from: (value) => unit_status_1.UnitStatus[value],
+        },
+    }),
     __metadata("design:type", Number)
 ], Unit.prototype, "status", void 0);
 __decorate([
@@ -75,11 +105,12 @@ __decorate([
     __metadata("design:type", user_entity_1.User)
 ], Unit.prototype, "tenant", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => building_entity_1.Building, building => building.units),
+    (0, typeorm_1.ManyToOne)(() => building_entity_1.Building, building => building.units, { onDelete: "CASCADE" }),
     (0, typeorm_1.JoinColumn)({ name: 'building_id' }),
     __metadata("design:type", building_entity_1.Building)
 ], Unit.prototype, "building", void 0);
 exports.Unit = Unit = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Index)(["uNo", "building.id"], { unique: true })
 ], Unit);
 //# sourceMappingURL=unit.entity.js.map

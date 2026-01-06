@@ -10,9 +10,6 @@ async function bootstrap() {
     .setTitle('Buena GmbH')
     .setDescription('Property Management Application')
     .setVersion('1.0')
-    // .addTag('property')
-    // .addTag('management')
-    // .addTag('units')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   //SwaggerModule.setup('api', app, documentFactory);
@@ -21,6 +18,6 @@ async function bootstrap() {
     jsonDocumentUrl: 'swagger/json',
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

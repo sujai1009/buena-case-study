@@ -18,7 +18,7 @@ const unit_service_1 = require("./unit.service");
 const create_unit_dto_1 = require("./dto/create-unit.dto");
 const update_unit_dto_1 = require("./dto/update-unit.dto");
 const swagger_1 = require("@nestjs/swagger");
-const pagination_request_dto_1 = require("../common/pagination-request-dto");
+const unit_page_request_dto_1 = require("./dto/unit-page-request-dto");
 let UnitController = class UnitController {
     unitService;
     constructor(unitService) {
@@ -35,6 +35,9 @@ let UnitController = class UnitController {
     }
     update(id, updateUnitDto) {
         return this.unitService.update(+id, updateUnitDto);
+    }
+    updateMany(updateUnitDtos) {
+        return this.unitService.updateMany(updateUnitDtos);
     }
     remove(id) {
         return this.unitService.remove(+id);
@@ -58,7 +61,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [pagination_request_dto_1.PaginationRequest]),
+    __metadata("design:paramtypes", [unit_page_request_dto_1.UnitPageReq]),
     __metadata("design:returntype", void 0)
 ], UnitController.prototype, "findAll", null);
 __decorate([
@@ -70,12 +73,26 @@ __decorate([
 ], UnitController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update unit by id' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Return updated unit data' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_unit_dto_1.UpdateUnitDto]),
     __metadata("design:returntype", void 0)
 ], UnitController.prototype, "update", null);
+__decorate([
+    (0, common_1.Put)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Update multiple units' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Return updated units data' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
+    (0, swagger_1.ApiBody)({ type: [update_unit_dto_1.UpdateUnitDto] }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", void 0)
+], UnitController.prototype, "updateMany", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),

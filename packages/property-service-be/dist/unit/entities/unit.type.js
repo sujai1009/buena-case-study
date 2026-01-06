@@ -7,5 +7,6 @@ var UnitType;
     UnitType[UnitType["Office"] = 1] = "Office";
     UnitType[UnitType["Garden"] = 2] = "Garden";
     UnitType[UnitType["Parking"] = 3] = "Parking";
+    UnitType[UnitType["TEMP_TYPE"] = 4] = "TEMP_TYPE";
 })(UnitType || (exports.UnitType = UnitType = {}));
 //# sourceMappingURL=unit.type.js.map

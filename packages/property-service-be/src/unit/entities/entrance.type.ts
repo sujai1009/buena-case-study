@@ -1,4 +1,4 @@
 
 export enum EntranceType {
-    North, south, East, West
+    North, South, East, West
 }

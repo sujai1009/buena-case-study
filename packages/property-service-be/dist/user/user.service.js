@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("./entities/user.entity");
 const typeorm_2 = require("typeorm");
+const user_type_1 = require("./entities/user.type");
 let UserService = class UserService {
     userRepository;
     constructor(userRepository) {
@@ -25,8 +26,8 @@ let UserService = class UserService {
     create(createUserDto) {
         return 'This action adds a new user';
     }
-    findAll() {
-        return `This action returns all user`;
+    async findAll() {
+        return await this.userRepository.findBy({ type: (0, typeorm_2.In)([user_type_1.UserType.Accountant, user_type_1.UserType.Manager]) });
     }
     async findUsersByIds(ids) {
         const results = await this.userRepository.findBy({ id: (0, typeorm_2.In)(ids) });

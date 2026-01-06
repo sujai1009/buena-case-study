@@ -4,6 +4,7 @@ export declare class CreatePropertyDto {
     type: PropertyType;
     manager: number;
     accountant: number;
+    fileId: number;
     isbulkCreation: boolean;
     totalBuildings: number;
     street: string;

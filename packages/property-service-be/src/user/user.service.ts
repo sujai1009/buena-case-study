@@ -17,8 +17,14 @@ export class UserService {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    // const results = await this.userRepository.findBy({ type: In([UserType.Accountant, UserType.Manager]) });
+    // const results = await this.userRepository.find();
+    //console.log("In user service", results);
+    // const mapData = new Map(results.map(obj => [obj.type, obj]))
+    // console.log(mapData)
+    // return mapData;
+    return await this.userRepository.findBy({ type: In([UserType.Accountant, UserType.Manager]) });
   }
 
   async findUsersByIds(ids: number[]) {

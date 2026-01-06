@@ -36,20 +36,21 @@ __decorate([
     __metadata("design:type", String)
 ], Building.prototype, "houseNumber", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => address_entity_1.Address),
+    (0, typeorm_1.ManyToOne)(() => address_entity_1.Address, (address) => address.buildings),
     (0, typeorm_1.JoinColumn)({ name: 'address_id' }),
     __metadata("design:type", address_entity_1.Address)
 ], Building.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => property_entity_1.Property, property => property.buildings),
+    (0, typeorm_1.ManyToOne)(() => property_entity_1.Property, property => property.buildings, { onDelete: "CASCADE" }),
     (0, typeorm_1.JoinColumn)({ name: 'property_id' }),
     __metadata("design:type", property_entity_1.Property)
 ], Building.prototype, "property", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => unit_entity_1.Unit, (unit) => unit.building),
+    (0, typeorm_1.OneToMany)(() => unit_entity_1.Unit, (unit) => unit.building, { lazy: true, onDelete: "CASCADE" }),
     __metadata("design:type", Array)
 ], Building.prototype, "units", void 0);
 exports.Building = Building = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Index)(["houseNumber", "property.id"], { unique: true })
 ], Building);
 //# sourceMappingURL=building.entity.js.map

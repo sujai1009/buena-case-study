@@ -7,18 +7,21 @@ import { UserService } from 'src/user/user.service';
 import { AddressService } from 'src/address/address.service';
 import { Address } from 'src/address/entities/address.entity';
 import { Building } from 'src/building/entities/building.entity';
-import { PaginationRequest } from 'src/common/pagination-request-dto';
 import { PaginationResponse } from 'src/common/pagination-response-dto';
+import { PropertyPageReq } from './dto/property-page-request-dto';
+import { FileService } from 'src/file/file.service';
 export declare class PropertyService {
     private readonly propertyRepository;
     private readonly buildingService;
     private readonly userService;
     private readonly addressService;
-    constructor(propertyRepository: Repository<Property>, buildingService: BuildingService, userService: UserService, addressService: AddressService);
-    create(createPropertyDto: CreatePropertyDto): Promise<Property>;
-    findAll(paginationRequest: PaginationRequest): Promise<PaginationResponse>;
+    private readonly fileService;
+    constructor(propertyRepository: Repository<Property>, buildingService: BuildingService, userService: UserService, addressService: AddressService, fileService: FileService);
+    create(createPropertyDto: CreatePropertyDto): Promise<Property | null>;
+    findAll(paginationRequest: PropertyPageReq): Promise<PaginationResponse>;
     findOne(id: number): Promise<Property | null>;
-    update(id: number, updatePropertyDto: UpdatePropertyDto): string;
+    update(id: number, updatePropertyDto: UpdatePropertyDto): Promise<Property | "No Property with id found">;
+    updateMany(updatePropertyDtos: UpdatePropertyDto[]): Promise<Property[]>;
     remove(id: number): Promise<void>;
     createMultipleBuildings(totalBuildings: number, property: Property, address: Address): Promise<Building[]>;
 }

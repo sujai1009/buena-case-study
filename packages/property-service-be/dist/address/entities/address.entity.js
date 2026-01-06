@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Address = void 0;
+const building_entity_1 = require("../../building/entities/building.entity");
 const base_id_1 = require("../../common/base-id");
 const typeorm_1 = require("typeorm");
 let Address = class Address extends base_id_1.BaseId {
@@ -17,6 +18,7 @@ let Address = class Address extends base_id_1.BaseId {
     city;
     code;
     country;
+    buildings;
 };
 exports.Address = Address;
 __decorate([
@@ -43,7 +45,12 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Address.prototype, "country", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => building_entity_1.Building, (building) => building.address),
+    __metadata("design:type", Array)
+], Address.prototype, "buildings", void 0);
 exports.Address = Address = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Index)(["street", "city", "country", "code"], { unique: true })
 ], Address);
 //# sourceMappingURL=address.entity.js.map

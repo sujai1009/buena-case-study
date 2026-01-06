@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { AddressModule } from 'src/address/address.module';
 import { BuildingModule } from 'src/building/building.module';
+import { FileModule } from 'src/file/file.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Property]), forwardRef(() => BuildingModule) , UserModule, AddressModule],
+  imports: [TypeOrmModule.forFeature([Property]), forwardRef(() => BuildingModule) , UserModule, AddressModule, FileModule],
   controllers: [PropertyController],
   providers: [PropertyService],
   exports: [TypeOrmModule, PropertyService]

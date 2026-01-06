@@ -19,6 +19,8 @@ const typeorm_2 = require("typeorm");
 const unit_entity_1 = require("./entities/unit.entity");
 const building_service_1 = require("../building/building.service");
 const pagination_response_dto_1 = require("../common/pagination-response-dto");
+const unit_type_1 = require("./entities/unit.type");
+const unit_status_1 = require("./entities/unit.status");
 let UnitService = class UnitService {
     unitRepository;
     buildingService;
@@ -35,20 +37,33 @@ let UnitService = class UnitService {
             return "Building cannot be saved as Property info is null";
         }
         const unit = this.unitRepository.create(createUnitDto);
+        unit.status = unit_status_1.UnitStatus.CREATED;
+        unit.building = building;
         await this.unitRepository.save(unit);
-        return unit;
+        return await this.findOne(unit.id);
     }
     async createMany(totalUnits, building) {
         let units = [];
         for (var i = 0; i < totalUnits; i++) {
-            units.push(await this.unitRepository.create({ building }));
+            const type = unit_type_1.UnitType.TEMP_TYPE;
+            const status = unit_status_1.UnitStatus.CREATED;
+            units.push(await this.unitRepository.create({ status, type, building }));
         }
         await this.unitRepository.save(units);
         return units;
     }
     async findAll(paginationRequest) {
         const { limit = 10, offset = 0 } = paginationRequest;
+        console.log("In Unit Service", paginationRequest);
         const [units, total] = await this.unitRepository.findAndCount({
+            relations: {
+                building: true,
+            },
+            where: {
+                building: {
+                    id: paginationRequest.buildingId,
+                },
+            },
             take: limit,
             skip: offset,
         });
@@ -57,8 +72,27 @@ let UnitService = class UnitService {
     findOne(id) {
         return this.unitRepository.findOneBy({ id });
     }
-    update(id, updateUnitDto) {
-        return `This action updates a #${id} unit`;
+    async update(id, updateUnitDto) {
+        const unit = await this.findOne(id);
+        if (!unit) {
+            return "No unit with id found";
+        }
+        Object.assign(unit, updateUnitDto);
+        await this.unitRepository.save(unit);
+        return await this.findOne(id);
+    }
+    async updateMany(updateUnitDtos) {
+        console.log("in updateMany");
+        const ids = updateUnitDtos.map(d => d.id);
+        const units = await this.unitRepository.findBy({ id: (0, typeorm_2.In)(ids) });
+        const map = new Map(updateUnitDtos.map(d => [d.id, d]));
+        for (let u of units) {
+            Object.assign(u, map.get(u.id));
+        }
+        await this.unitRepository.save(units);
+        return await this.unitRepository.findBy({
+            id: (0, typeorm_2.In)(ids)
+        });
     }
     async remove(id) {
         await this.unitRepository.delete(id);

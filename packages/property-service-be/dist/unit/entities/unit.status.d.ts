@@ -1,6 +1,7 @@
 export declare enum UnitStatus {
-    ADDED = 0,
-    VACANT = 1,
-    OCCUPIED = 2,
-    CONTRACT_SIGNED = 3
+    CREATED = 0,
+    ADDED = 1,
+    VACANT = 2,
+    OCCUPIED = 3,
+    CONTRACT_SIGNED = 4
 }

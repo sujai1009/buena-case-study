@@ -20,14 +20,17 @@ const typeorm_2 = require("@nestjs/typeorm");
 const unit_service_1 = require("../unit/unit.service");
 const property_service_1 = require("../property/property.service");
 const pagination_response_dto_1 = require("../common/pagination-response-dto");
+const address_service_1 = require("../address/address.service");
 let BuildingService = class BuildingService {
     buildingRepository;
     unitService;
     propertyService;
-    constructor(buildingRepository, unitService, propertyService) {
+    addressService;
+    constructor(buildingRepository, unitService, propertyService, addressService) {
         this.buildingRepository = buildingRepository;
         this.unitService = unitService;
         this.propertyService = propertyService;
+        this.addressService = addressService;
     }
     async create(createBuildingDto) {
         if (!createBuildingDto.propertyId) {
@@ -37,38 +40,82 @@ let BuildingService = class BuildingService {
         if (!property) {
             return "Building cannot be saved as Property info is null";
         }
+        const address = await this.addressService.createFromBuildingDto(createBuildingDto);
         const building = new building_entity_1.Building();
         building.property = property;
         building.name = createBuildingDto.name;
         building.houseNumber = createBuildingDto.houseNumber;
+        building.address = address;
         await this.buildingRepository.save(building);
         if (createBuildingDto.isbulkCreation) {
             building.units = await this.createMultipleUnits(createBuildingDto.totalUnits, building);
             await this.buildingRepository.save(building);
         }
-        return building;
+        return await this.findOne(building.id);
     }
     async createMany(totalBuildings, property, address) {
         let buildings = [];
         for (var i = 0; i < totalBuildings; i++) {
-            buildings.push(await this.buildingRepository.create({ property, address }));
+            const houseNumber = i + 1 + "";
+            const name = "TEMP_BUILDING_NAME_" + houseNumber;
+            buildings.push(await this.buildingRepository.create({ houseNumber, name, property, address }));
         }
         await this.buildingRepository.save(buildings);
         return buildings;
     }
-    async findAll(paginationRequest) {
-        const { limit = 10, offset = 0 } = paginationRequest;
+    async findAll(buildingPage) {
+        const { limit = 10, offset = 0 } = buildingPage;
+        console.log("In Building Service", buildingPage);
         const [buildings, total] = await this.buildingRepository.findAndCount({
+            relations: {
+                property: true,
+                address: true,
+            },
+            where: {
+                property: {
+                    id: buildingPage.propertyId,
+                },
+            },
             take: limit,
             skip: offset,
         });
         return pagination_response_dto_1.PaginationResponse.getPageable(buildings, total, limit, offset);
     }
-    findOne(id) {
-        return this.buildingRepository.findOneBy({ id });
+    async findOne(id) {
+        return await this.buildingRepository.findOne({
+            where: { id },
+            relations: {
+                units: true,
+                address: true,
+                property: true
+            },
+        });
     }
-    update(id, updateBuildingDto) {
-        return `This action updates a #${id} building`;
+    async update(id, updateBuildingDto) {
+        const building = await this.findOne(id);
+        if (!building) {
+            return "No building with id found";
+        }
+        Object.assign(building, updateBuildingDto);
+        await this.buildingRepository.save(building);
+        if (updateBuildingDto.isbulkCreation && updateBuildingDto.totalUnits) {
+            building.units = await this.createMultipleUnits(updateBuildingDto.totalUnits, building);
+            await this.buildingRepository.save(building);
+        }
+        return building;
+    }
+    async updateMany(updateBuildingDtos) {
+        console.log("in updateMany");
+        const ids = updateBuildingDtos.map(d => d.id);
+        const buildings = await this.buildingRepository.findBy({ id: (0, typeorm_1.In)(ids) });
+        const map = new Map(updateBuildingDtos.map(d => [d.id, d]));
+        for (const b of buildings) {
+            Object.assign(b, map.get(b.id));
+        }
+        await this.buildingRepository.save(buildings);
+        return await this.buildingRepository.findBy({
+            id: (0, typeorm_1.In)(ids)
+        });
     }
     async remove(id) {
         await this.buildingRepository.delete(id);
@@ -83,8 +130,10 @@ exports.BuildingService = BuildingService = __decorate([
     __param(0, (0, typeorm_2.InjectRepository)(building_entity_1.Building)),
     __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => unit_service_1.UnitService))),
     __param(2, (0, common_1.Inject)((0, common_1.forwardRef)(() => property_service_1.PropertyService))),
+    __param(3, (0, common_1.Inject)((0, common_1.forwardRef)(() => address_service_1.AddressService))),
     __metadata("design:paramtypes", [typeorm_1.Repository,
         unit_service_1.UnitService,
-        property_service_1.PropertyService])
+        property_service_1.PropertyService,
+        address_service_1.AddressService])
 ], BuildingService);
 //# sourceMappingURL=building.service.js.map

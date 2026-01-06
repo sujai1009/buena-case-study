@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
 import { BuildingService } from './building.service';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { PaginationRequest } from 'src/common/pagination-request-dto';
+import { BuildingPageReq } from './dto/building-page-request-dto';
 
 @Controller('b')
 export class BuildingController {
@@ -21,8 +21,8 @@ export class BuildingController {
   @ApiOperation({ summary: 'Find all buildings with pagination' })
   @ApiResponse({ status: 201, description: 'Return pageable builing data' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  findAll(@Query() paginationRequest: PaginationRequest) {
-    return this.buildingService.findAll(paginationRequest);
+  findAll(@Query() buildingPage: BuildingPageReq) {
+    return this.buildingService.findAll(buildingPage);
   }
 
   @Get(':id')
@@ -36,16 +36,25 @@ export class BuildingController {
   @Patch(':id')
   @ApiOperation({ summary: 'update building details' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiBody({ type: CreateBuildingDto })
+  @ApiBody({ type: UpdateBuildingDto })
   update(@Param('id') id: string, @Body() updateBuildingDto: UpdateBuildingDto) {
     return this.buildingService.update(+id, updateBuildingDto);
   }
 
+  @Put()
+  @ApiOperation({ summary: 'update all building details' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiBody({ type: UpdateBuildingDto })
+  updateMany(@Body() updateBuildingDtos: UpdateBuildingDto[]) {
+    return this.buildingService.updateMany(updateBuildingDtos);
+  }
+
+
   @Delete(':id')
   @ApiOperation({ summary: 'Delete building by id' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiBody({ type: CreateBuildingDto })
   remove(@Param('id') id: string) {
+    console.log("Deleted sucessfully")
     return this.buildingService.remove(+id);
   }
 }

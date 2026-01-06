@@ -15,12 +15,14 @@ const typeorm_1 = require("typeorm");
 const property_type_1 = require("./property.type");
 const building_entity_1 = require("../../building/entities/building.entity");
 const user_entity_1 = require("../../user/entities/user.entity");
+const upload_file_entity_1 = require("../../file/entities/upload.file.entity");
 let Property = class Property extends base_id_1.BaseId {
     name;
     type;
     manager;
     accountant;
     buildings;
+    aggrementFile;
 };
 exports.Property = Property;
 __decorate([
@@ -32,17 +34,21 @@ __decorate([
 ], Property.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        nullable: false
+        type: 'int',
+        transformer: {
+            to: (value) => value,
+            from: (value) => property_type_1.PropertyType[value],
+        },
     }),
     __metadata("design:type", Number)
 ], Property.prototype, "type", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => user_entity_1.User),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.managers),
     (0, typeorm_1.JoinColumn)({ name: 'manager_id' }),
     __metadata("design:type", user_entity_1.User)
 ], Property.prototype, "manager", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => user_entity_1.User),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.accountants),
     (0, typeorm_1.JoinColumn)({ name: 'accountant_id' }),
     __metadata("design:type", user_entity_1.User)
 ], Property.prototype, "accountant", void 0);
@@ -50,6 +56,11 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => building_entity_1.Building, (building) => building.property),
     __metadata("design:type", Array)
 ], Property.prototype, "buildings", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => upload_file_entity_1.UploadFile, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: 'file_id' }),
+    __metadata("design:type", upload_file_entity_1.UploadFile)
+], Property.prototype, "aggrementFile", void 0);
 exports.Property = Property = __decorate([
     (0, typeorm_1.Entity)()
 ], Property);

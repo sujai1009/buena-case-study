@@ -13,9 +13,12 @@ exports.User = void 0;
 const base_id_1 = require("../../common/base-id");
 const typeorm_1 = require("typeorm");
 const user_type_1 = require("./user.type");
+const property_entity_1 = require("../../property/entities/property.entity");
 let User = class User extends base_id_1.BaseId {
     name;
     type;
+    managers;
+    accountants;
 };
 exports.User = User;
 __decorate([
@@ -27,10 +30,23 @@ __decorate([
 ], User.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        nullable: false
+        nullable: false,
+        type: 'int',
+        transformer: {
+            to: (value) => value,
+            from: (value) => user_type_1.UserType[value],
+        },
     }),
     __metadata("design:type", Number)
 ], User.prototype, "type", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => property_entity_1.Property, (propManagers) => propManagers.manager),
+    __metadata("design:type", Array)
+], User.prototype, "managers", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => property_entity_1.Property, (propAccountantss) => propAccountantss.accountant),
+    __metadata("design:type", Array)
+], User.prototype, "accountants", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

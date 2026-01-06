@@ -22,13 +22,32 @@ let AddressService = class AddressService {
     constructor(addressRepository) {
         this.addressRepository = addressRepository;
     }
-    async create(createPropertyDto) {
+    async createFromBuildingDto(createBuildingDto) {
+        console.log(createBuildingDto);
+        const address = new address_entity_1.Address();
+        address.street = createBuildingDto.street;
+        address.city = createBuildingDto.city;
+        address.code = createBuildingDto.zipcode;
+        address.country = createBuildingDto.country;
+        return await this.findOrCreateAddress(address);
+    }
+    async createFromPropertyDto(createPropertyDto) {
         const address = new address_entity_1.Address();
         address.street = createPropertyDto.street;
         address.city = createPropertyDto.city;
         address.code = createPropertyDto.zipcode;
         address.country = createPropertyDto.country;
-        return this.addressRepository.save(address);
+        return await this.findOrCreateAddress(address);
+    }
+    async findOrCreateAddress(address) {
+        const addressFound = await this.addressRepository.findOneBy({ ...address });
+        if (addressFound) {
+            return addressFound;
+        }
+        else {
+            const newAddress = this.addressRepository.create({ ...address });
+            return this.addressRepository.save(newAddress);
+        }
     }
     findAll() {
         return this.addressRepository.find();

@@ -1,1 +1,1 @@
-{"version":3,"file":"update-property.dto.js","sourceRoot":"","sources":["../../../src/property/dto/update-property.dto.ts"],"names":[],"mappings":";;;AAAA,6CAA8C;AAC9C,+DAA0D;AAE1D,MAAa,iBAAkB,SAAQ,IAAA,qBAAW,EAAC,uCAAiB,CAAC;CAAG;AAAxE,8CAAwE"}
+{"version":3,"file":"update-property.dto.js","sourceRoot":"","sources":["../../../src/property/dto/update-property.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA2D;AAC3D,+DAA0D;AAE1D,MAAa,iBAAkB,SAAQ,IAAA,qBAAW,EAAC,uCAAiB,CAAC;IAEjE,EAAE,CAAS;CACd;AAHD,8CAGC;AADG;IADC,IAAA,qBAAW,EAAC,EAAE,OAAO,EAAE,CAAC,EAAE,CAAC;;6CACjB"}

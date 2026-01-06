@@ -26,19 +26,32 @@ let UserSeedService = class UserSeedService {
     async onModuleInit() {
         console.log(`The module has been initialized.`);
         const users = this.getUserData();
-        const userCount = await this.userRepository.count();
-        console.log("Existing user count:" + userCount);
-        if (userCount == 0) {
-            await this.userRepository.insert(users);
+        let newUsersToCreate = [];
+        for (var i = 0; i < users.length; i++) {
+            const existingUser = await this.userRepository.findBy(users[i]);
+            if (existingUser.length == 0) {
+                newUsersToCreate.push(users[i]);
+            }
         }
-        console.log(await this.userRepository.find());
+        console.log("New users to create", newUsersToCreate);
+        if (newUsersToCreate.length > 0) {
+            await this.userRepository.insert(newUsersToCreate);
+        }
     }
     getUserData() {
         return [
             { name: 'manager', type: user_type_1.UserType.Manager },
+            { name: 'manager1', type: user_type_1.UserType.Manager },
+            { name: 'manager2', type: user_type_1.UserType.Manager },
             { name: 'accountant', type: user_type_1.UserType.Accountant },
+            { name: 'accountant1', type: user_type_1.UserType.Accountant },
+            { name: 'accountant2', type: user_type_1.UserType.Accountant },
             { name: 'owner', type: user_type_1.UserType.Owner },
-            { name: 'tenant', type: user_type_1.UserType.Tenant }
+            { name: 'owner1', type: user_type_1.UserType.Owner },
+            { name: 'owner2', type: user_type_1.UserType.Owner },
+            { name: 'tenant', type: user_type_1.UserType.Tenant },
+            { name: 'tenant1', type: user_type_1.UserType.Tenant },
+            { name: 'tenant2', type: user_type_1.UserType.Tenant }
         ];
     }
 };

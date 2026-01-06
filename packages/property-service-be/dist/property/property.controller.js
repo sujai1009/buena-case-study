@@ -18,7 +18,7 @@ const property_service_1 = require("./property.service");
 const create_property_dto_1 = require("./dto/create-property.dto");
 const update_property_dto_1 = require("./dto/update-property.dto");
 const swagger_1 = require("@nestjs/swagger");
-const pagination_request_dto_1 = require("../common/pagination-request-dto");
+const property_page_request_dto_1 = require("./dto/property-page-request-dto");
 let PropertyController = class PropertyController {
     propertyService;
     constructor(propertyService) {
@@ -35,6 +35,9 @@ let PropertyController = class PropertyController {
     }
     update(id, updatePropertyDto) {
         return this.propertyService.update(+id, updatePropertyDto);
+    }
+    updateMany(updatePropertyDtos) {
+        return this.propertyService.updateMany(updatePropertyDtos);
     }
     remove(id) {
         return this.propertyService.remove(+id);
@@ -59,7 +62,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [pagination_request_dto_1.PaginationRequest]),
+    __metadata("design:paramtypes", [property_page_request_dto_1.PropertyPageReq]),
     __metadata("design:returntype", void 0)
 ], PropertyController.prototype, "findAll", null);
 __decorate([
@@ -67,10 +70,9 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Find property with given Id' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'List property by id' }),
-    (0, swagger_1.ApiBody)({ type: create_property_dto_1.CreatePropertyDto }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], PropertyController.prototype, "findOne", null);
 __decorate([
@@ -78,13 +80,24 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Update the property' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Update the property with new details' }),
-    (0, swagger_1.ApiBody)({ type: create_property_dto_1.CreatePropertyDto }),
+    (0, swagger_1.ApiBody)({ type: update_property_dto_1.UpdatePropertyDto }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_property_dto_1.UpdatePropertyDto]),
     __metadata("design:returntype", void 0)
 ], PropertyController.prototype, "update", null);
+__decorate([
+    (0, common_1.Put)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Update multiple properties' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Return updated properties data' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
+    (0, swagger_1.ApiBody)({ type: [update_property_dto_1.UpdatePropertyDto] }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", void 0)
+], PropertyController.prototype, "updateMany", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete the property' }),
