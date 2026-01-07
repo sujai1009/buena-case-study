@@ -20,7 +20,7 @@ import { useStoreContext } from '@/components/provider/store.context.provider';
 export default function EditEntityForm() {
     const router = useRouter();
     const params = useParams();
-    const { sharedObject } = useStoreContext();
+    const { sharedObject } : any = useStoreContext();
 
     const searchParams = useSearchParams()
     const propertyType = searchParams.get('propertyType')
@@ -43,8 +43,8 @@ export default function EditEntityForm() {
             if (isLoading) return <div>Loading...</div>;
             dataForTable = data;
         } else {
-            if ( sharedObject ) {
-                propertyId = sharedObject.property.id;
+            if ( sharedObject as Building ) {
+                propertyId = sharedObject?.property.id;
                 dataForTable = [sharedObject];
             }
         }
@@ -83,7 +83,7 @@ export default function EditEntityForm() {
         throw Error("Unknown type not supported");
     }
     
-    async function handleSubmit(formdata) {
+    async function handleSubmit(formdata: any) {
         const response = await sendRequest(updationURI, HttpMethods.PUT, JSON.stringify(formdata));
         console.log("Submit form response::", response);
         if ( response.statusCode != null) {

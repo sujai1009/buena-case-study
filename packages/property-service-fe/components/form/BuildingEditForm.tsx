@@ -6,7 +6,14 @@ import AddressForm from './AddressForm';
 import { Building } from '../types/app.types';
 import { formDataToJson } from "formdata2json";
 
-export default function BuildingEditForm({title, buildings, router, onSubmit}) {
+interface Props {
+    title: string;
+    router: any;
+    buildings: any
+    onSubmit: any
+}
+
+export default function BuildingEditForm({title, buildings, router, onSubmit} : Props) {
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
@@ -30,7 +37,7 @@ export default function BuildingEditForm({title, buildings, router, onSubmit}) {
             </tr>
         </thead>
         <tbody>
-            {buildings != null && buildings.map((building, index) => (
+            {buildings != null && buildings.map((building: any, index: number) => (
             <tr key={"table_tr_key_" + building.id} className="bg-neutral-primary border-b border-default">
                 <th scope="row" className="px-6 py-4 font-medium text-heading whitespace-nowrap">
                     <input type="hidden" name={"buildings[" + index + "].id"} defaultValue={building.id} />

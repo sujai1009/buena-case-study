@@ -4,8 +4,15 @@ import Form from 'next/form';
 import { FormEvent, useState } from 'react';
 import AddressForm from './AddressForm';
 import { formDataToJson } from "formdata2json";
- 
-export default function UnitEditForm({title, router, units, onSubmit}) {    
+
+ interface Props {
+  title: string;
+  router: any;
+  onSubmit: any;
+  units: any;
+ }
+
+export default function UnitEditForm({title, router, units, onSubmit} : Props) {
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
@@ -49,7 +56,7 @@ export default function UnitEditForm({title, router, units, onSubmit}) {
             </tr>
         </thead>
         <tbody>
-            {units != null && units.map((unit, index) => (
+            {units != null && units.map((unit : any, index: number) => (
             <tr key={"table_tr_key_" + unit.id} className="bg-neutral-primary border-b border-default">
                 <th scope="row" className="px-6 py-4 font-medium text-heading whitespace-nowrap">
                     <input type="hidden" name={"units[" + index + "].id"} defaultValue={unit.id} />

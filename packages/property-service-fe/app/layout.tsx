@@ -33,7 +33,8 @@ export default function RootLayout({
       >
         <ToastContainer
             position="top-center"
-            autoClose={5000}
+            autoClose={2000}
+            limit={1}
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick={false}
@@ -42,7 +43,7 @@ export default function RootLayout({
             draggable
             pauseOnHover
             theme="light"
-            transition={Bounce}
+            transition={Slide}
             />
         <Navbar/>
         <div className="min-h-130">

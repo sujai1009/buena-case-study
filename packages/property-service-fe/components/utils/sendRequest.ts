@@ -14,8 +14,29 @@ export const sendRequest = async (
     },
   };
 
-  return fetch(url, options).then(r => r.json());
+  //console.log("sendRequest,", url)
+  return fetch(url, options).then(r => {
+    //console.log("sendRequest response:", r);
+    return r.json()
+  });
 };
+
+// export const sendRequest = async (
+//   url: string,
+//   method?: HttpMethods,
+//   payload?: string,
+// ) => {
+//   const options = {
+//     method: method? HttpMethods[method] : HttpMethods.GET,
+//     ...(payload && { body: payload }),
+//     headers: {
+//       accept: "application/json",
+//       "Content-Type": "application/json",
+//     },
+//   };
+
+//   return fetch(url, options as RequestInit).then(r => r.json());
+// };
 
 export const sendFileRequest = async (
   url: string,

@@ -55,7 +55,7 @@ export default function CreateEntityForm() {
         return <div>Request type not supported</div>;
     } 
     
-    async function handleSubmit(formdata) {
+    async function handleSubmit(formdata: any) {
         if (type === "property" && fileResponse != null) {
             formdata["fileId"] = fileResponse.id;
         }
@@ -81,7 +81,7 @@ export default function CreateEntityForm() {
         }
     }
 
-    async function handleFileUpload(fileUploadFormData) {
+    async function handleFileUpload(fileUploadFormData: any) {
         console.log("In handleFileUpload", fileUploadFormData);
         fileResponse = await sendFileRequest("/api/file", fileUploadFormData);
     }

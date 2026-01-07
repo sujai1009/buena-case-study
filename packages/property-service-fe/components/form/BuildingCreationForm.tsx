@@ -3,8 +3,15 @@ import { ChevronDownIcon, PhotoIcon } from '@heroicons/react/16/solid'
 import Form from 'next/form';
 import { FormEvent, useState } from 'react';
 import AddressForm from './AddressForm';
- 
-export default function BuildingCreationForm({title, router, propertyId, onSubmit}) {
+
+interface Props {
+    title: string;
+    router: any;
+    propertyId: any
+    onSubmit: any
+}
+
+export default function BuildingCreationForm({title, router, propertyId, onSubmit} : Props) {
     const [isbulkCreation, setIsbulkCreation] = useState(true)
     
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {

@@ -1,0 +1,18 @@
+FROM node:trixie-slim AS base_build_image
+
+WORKDIR /app
+
+COPY ./package*.json  ./lerna.json ./
+COPY ./packages/property-service-be ./packages/property-service-be
+COPY ./packages/property-service-fe ./packages/property-service-fe
+
+RUN npm install
+RUN npx lerna run build
+
+FROM node:trixie-slim AS development-property-service-be
+EXPOSE 3000
+CMD ["npx", "lerna", "run", "start", "--scope", "property-service-be"]
+
+FROM node:trixie-slim AS development-property-service-fe
+EXPOSE 8080
+CMD ["npx", "lerna", "run", "start", "--scope", "property-service-fe"]

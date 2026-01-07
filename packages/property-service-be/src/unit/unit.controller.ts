@@ -49,6 +49,7 @@ export class UnitController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+        console.log("In unit delete::", id)
     return this.unitService.remove(+id);
   }
 }

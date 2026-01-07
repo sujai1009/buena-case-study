@@ -1,23 +1,105 @@
 services:
-  db:
-    image: postgres
-    restart: always
-    env_file:
-      - .env
-    # volumes:
-    #   - ./dataset:/docker-entrypoint-initdb.d
-    ports:
-      - 5432:5432
-    networks:
-      - buenaNetwork
-  metabase:
-    image: metabase/metabase:latest
+  # Development Profile
+  setup-development:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: base_build_image
+    profiles:
+      - development
+    command: [ "npm", "install" ]
     depends_on:
       - db
+    volumes:
+      - ./:/app
+  property-service-be-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development-property-service-be
+    depends_on:
+      setup-development:
+        condition: service_completed_successfully
+    profiles:
+      - development
+    environment:
+      - POSTGRES_HOST=db
     ports:
-      - 3000:3000
+      - "3000:3000"
+    working_dir: /app/packages/property-service-be
+    volumes:
+      - ./:/app
+
+  property-service-fe-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development-property-service-fe
+    depends_on:
+      setup-development:
+        condition: service_completed_successfully
+    profiles:
+      - development
+    environment:
+      - API_HOST=property-service-be-dev
+      - API_PORT=3000
+    ports:
+      - "8080:8080"
+    working_dir: /app/packages/property-service-fe
+    volumes:
+      - ./:/app
+
+    # Production Profile
+  property-service-be-prod:
+    build:
+      context: .
+      dockerfile: packages/property-service-be/Dockerfile
+      target: production
+    profiles:
+      - production
+    environment:
+      - POSTGRES_HOST=db
+    ports:
+      - "3000:3000"
     networks:
       - buenaNetwork
+    depends_on:
+      - db
+#    env_file:
+#      - ./packages/property-service-be/.env
+
+  property-service-fe-prod:
+    build:
+      context: .
+      dockerfile: packages/property-service-fe/Dockerfile
+      target: production
+    profiles:
+      - production
+    environment:
+      - API_HOST=property-service-be-prod
+      - API_PORT=3000
+    ports:
+      - "8080:8080"
+    networks:
+      - buenaNetwork
+    depends_on:
+      - property-service-be-prod
+  db:
+    image: postgres:15.15
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=buena_pms
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - buenaNetwork
+volumes:
+  postgres_data:
 
 networks:
   buenaNetwork:

@@ -12,7 +12,7 @@ import { useStoreContext } from "@/components/provider/store.context.provider";
 export default function AllBuildings() {
   const router = useRouter();
   const params = useParams();
-  const { setSharedObject } = useStoreContext();
+  const { setSharedObject } : any = useStoreContext();
 
   console.log("In Buildings page:::", params);
   const propertyId = params.id;// as unknown as number;
@@ -44,14 +44,14 @@ export default function AllBuildings() {
       const result = window.confirm("Do you want to delete this building and its units? Action not revertable. Kindly confirm.");
       
       if (result) {
-        const remainingBuildings = data.filter(card => card.id !== prop.id);
+        const remainingBuildings = data && data.filter(card => card.id !== prop.id);
         mutate(remainingBuildings, false);
 
         try {
           await fetch("/api/buildings?id=" + prop.id, { method: 'DELETE' });
           mutate(); 
           toast.success("Building deleted sucessfully")
-        } catch (err) {
+        } catch (err: any) {
           mutate(data);
           toast.error("Failed to delete Building:", err);
         }
@@ -88,7 +88,13 @@ export default function AllBuildings() {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
           {data != null && data.map((building) => (
-            <BuildingCard key={building.id} building={building}  callDelete={() => callDelete(building)} callDetail={() => callDetail(building)} callEdit={() => callEdit(building)}/>
+            <BuildingCard 
+              key={building.id} 
+              building={building}  
+              callDelete={() => callDelete(building)} 
+              callDetail={() => callDetail(building)} 
+              callEdit={() => callEdit(building)}
+            />
           ))}
         </div>
       </div>

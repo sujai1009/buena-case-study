@@ -12,7 +12,7 @@ import { useStoreContext } from "@/components/provider/store.context.provider";
 export default function AllUnits() {
   const router = useRouter();
   const params = useParams();
-  const { setSharedObject } = useStoreContext();
+  const { setSharedObject } : any = useStoreContext();
 
   console.log("In Units page:::", params);
   const buildingId = params.id;// as unknown as number;
@@ -32,7 +32,6 @@ export default function AllUnits() {
   async function callEdit(prop: Unit) {
         console.log("Edit called", prop)
         setSharedObject(prop);
-        
         router.push('/EditEntityForm/unit');
   }
 
@@ -46,14 +45,14 @@ export default function AllUnits() {
       const result = window.confirm("Do you want to delete this unit? Action not revertable. Kindly confirm.");
       
       if (result) {
-        const remainingUnits = data.filter(card => card.id !== prop.id);
+        const remainingUnits = data && data.filter(card => card.id !== prop.id);
         mutate(remainingUnits, false);
 
         try {
           await fetch("/api/units?id=" + prop.id, { method: 'DELETE' });
           mutate(); 
           toast.success("Unit deleted sucessfully")
-        } catch (err) {
+        } catch (err: any) {
           mutate(data);
           toast.error("Failed to delete Unit:", err);
         }
@@ -83,7 +82,7 @@ export default function AllUnits() {
                   <Button onClick={addNewFn}>Add</Button>
                 </div>
 
-                <div className="absolute left-55 h-full">
+                <div className="absolute left-35 h-full">
                   <Button onClick={editAllFn}>Edit All</Button>
                 </div>
             </div>
@@ -91,7 +90,13 @@ export default function AllUnits() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
             {data != null && data.map((unit) => (
-              <UnitCard key={unit.id} unit={unit} callDelete={() => callDelete(unit)} callDetail={() => callDetail(unit)} callEdit={() => callEdit(unit)}/>
+              <UnitCard 
+                key={unit.id} 
+                unit={unit} 
+                callDelete={() => callDelete(unit)} 
+                callDetail={() => callDetail(unit)} 
+                callEdit={() => callEdit(unit)}
+              />
             ))}
           </div>
         </div>

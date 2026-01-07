@@ -3,10 +3,10 @@ import { Property } from "@/components/types/app.types";
 import Link from "next/link";
 import { FaEdit, FaInfo, FaTrash } from "react-icons/fa";
 
-export const PropertyCard: React.FC<{ key:number, property: Property, callDownload: Function, callEdit: Function, callDelete: Function}> = ({ property, callDownload, callEdit, callDelete }) => (
+export const PropertyCard: React.FC<{ key:number, property: Property, callDownload: Function, callEdit: Function, callDelete: Function, callDetail: Function}> = ({ property, callDownload, callEdit, callDelete, callDetail }) => (
   <div className="bg-blue-100 rounded-md shadow-xl overflow-hidden max-h-65">
     <img
-      src={`/images/${property.type}.png`}
+      src={`/images/${property.type.toLowerCase()}.png`}
       alt={property.name}
       className="w-full h-28 md:h-40 lg:h-28 object-cover"
     />
@@ -20,6 +20,10 @@ export const PropertyCard: React.FC<{ key:number, property: Property, callDownlo
       <div className="mt-8 flex justify-between items-center text-gray-600">          
           <div className="flex items-center">
             <Button onClick={callEdit}><FaEdit/></Button>
+          </div>
+
+          <div className="flex items-center">
+            <Button onClick={callDetail}><FaInfo/></Button>
           </div>
 
           <div className="flex items-center">

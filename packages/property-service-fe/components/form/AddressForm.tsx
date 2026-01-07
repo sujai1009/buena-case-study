@@ -1,4 +1,8 @@
-export default function AddressForm({isbulkCreation}) {
+interface Props {
+    isbulkCreation: boolean;
+}
+
+export default function AddressForm({isbulkCreation} : Props) {
     console.log("AddresForm", isbulkCreation);
     return (
         <>

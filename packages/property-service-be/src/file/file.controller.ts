@@ -2,6 +2,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileService } from './file.service';
 import { diskStorage } from 'multer';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
 @Controller('f')
@@ -16,6 +17,8 @@ export class FileController {
   // }
 
   @Post()
+  @ApiOperation({ summary: 'Upload a file in to the system.' })
+  @ApiResponse({ status: 201, description: 'Return the row information of the created file' })
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -32,6 +35,8 @@ export class FileController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get the uploaded fine information for the given Id' })
+  @ApiResponse({ status: 201, description: 'Return the file info' })
   findOne(@Param('id') id: number) {
     return this.fileService.findOne(+id);
   }

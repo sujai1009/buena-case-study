@@ -3,11 +3,22 @@ import { ChevronDownIcon, PhotoIcon } from '@heroicons/react/16/solid'
 import Form from 'next/form';
 import { FormEvent, useState } from 'react';
 import AddressForm from './AddressForm';
- 
-export default function PropertyCreationForm({title, router, managers, accountants, onSubmit, fileUploadCallbck}) {
+
+interface Props {
+ title: string;
+ router: any;
+ onSubmit: any;
+ managers: any;
+ accountants: any;
+ fileUploadCallbck: any;
+}
+
+export default function PropertyCreationForm({title, router, managers, accountants, onSubmit, fileUploadCallbck} : Props) {
     const [isbulkCreation, setIsbulkCreation] = useState(true)
 
-	const onFileChange = (event) => {
+	const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files) return;
+
         const uploadedFile = event.target.files[0];
         const fileUploadData = new FormData();
         fileUploadData.append("file", uploadedFile);
@@ -82,7 +93,7 @@ export default function PropertyCreationForm({title, router, managers, accountan
                             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                             >
                             {/* <option>Select manager</option> */}
-                            {managers != null && managers.map((m) => (
+                            {managers != null && managers.map((m: any) => (
                                 <option key={m.id} value={m.id}>{m.name}</option>
                             ))}
                             </select>
@@ -105,7 +116,7 @@ export default function PropertyCreationForm({title, router, managers, accountan
                                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 >
                                 {/* <option selected >Select accountant</option> */}
-                                {accountants != null && accountants.map((m) => (
+                                {accountants != null && accountants.map((m: any) => (
                                     <option key={m.id} value={m.id}>{m.name}</option>
                                 ))}
                             </select>

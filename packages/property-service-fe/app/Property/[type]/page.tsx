@@ -14,9 +14,9 @@ import { HttpMethods } from "@/components/types/http.methods";
 export default function AllProperties() {
   const router = useRouter();
   const params = useParams();
-  const { setSharedObject } = useStoreContext();
+  const { setSharedObject } : any = useStoreContext();
 
-  const propertyType = params.type;// as unknown as number;
+  const propertyType:any = params.type;// as unknown as number;
   if (!allowedPropertyTypes.includes(propertyType)) {
     return <center><div>Invalid property type only <b>{allowedPropertyTypes.join(",")}</b> allowed</div></center>;
   }
@@ -53,19 +53,24 @@ export default function AllProperties() {
       router.push('/EditEntityForm/property');
   }
 
+  async function callDetail(prop: Property) {
+      console.log("Detail called", prop)
+      router.push('/Building/' + prop.id);
+  }
+
   async function callDelete(prop: Property) {
       console.log("Delete called", prop)
       const result = window.confirm("Do you want to delete this Property and its buildings and units? Action not revertable. Kindly confirm.");
       
       if (result) {
-        const remainingProperties = data.filter(card => card.id !== prop.id);
+        const remainingProperties = data && data.filter(card => card.id !== prop.id);
         mutate(remainingProperties, false);
 
         try {
           await fetch("/api/properties?id=" + prop.id, { method: 'DELETE' });
           mutate(); 
           toast.success("Property deleted sucessfully")
-        } catch (err) {
+        } catch (err: any) {
           mutate(data);
           toast.error("Error in delete property:", err);
         }
@@ -90,7 +95,14 @@ export default function AllProperties() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 min-h-90">          
           {data != null && data.map((property) => (
-            <PropertyCard key={property.id} property={property} callDelete={() => callDelete(property)} callDownload={() => callDownload(property)} callEdit={() => callEdit(property)}/>
+            <PropertyCard 
+              key={property.id} 
+              property={property} 
+              callDelete={() => callDelete(property)} 
+              callDownload={() => callDownload(property)} 
+              callEdit={() => callEdit(property)}
+              callDetail={() => callDetail(property)}
+            />
           ))}
         </div>
       </div>

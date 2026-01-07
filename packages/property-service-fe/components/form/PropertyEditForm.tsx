@@ -6,7 +6,16 @@ import AddressForm from './AddressForm';
 import { Building } from '../types/app.types';
 import { formDataToJson } from "formdata2json";
 
-export default function PropertyEditForm({title, properties, router, managers, accountants, onSubmit}) {
+interface Props {
+ title: string;
+ router: any;
+ onSubmit: any;
+ managers: any;
+ accountants: any;
+ properties: any;
+}
+
+export default function PropertyEditForm({title, properties, router, managers, accountants, onSubmit} : Props) {
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
@@ -39,7 +48,7 @@ export default function PropertyEditForm({title, properties, router, managers, a
             </tr>
         </thead>
         <tbody>
-            {properties != null && properties.map((property, index) => (
+            {properties != null && properties.map((property: any, index: number) => (
             <tr key={"table_tr_key_" + property.id} className="bg-neutral-primary border-b border-default">
                 <th scope="row" className="px-6 py-4 font-medium text-heading whitespace-nowrap">
                     <input type="hidden" name={"properties[" + index + "].id"} defaultValue={property.id} />
@@ -65,7 +74,7 @@ export default function PropertyEditForm({title, properties, router, managers, a
                         name={"properties[" + index + "].manager"} defaultValue={property.manager}
                         className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         >
-                        {managers && managers.map((m) => (
+                        {managers && managers.map((m: any) => (
                             <option key={m.id} value={m.id}>{m.name}</option>
                         ))}
                     </select>
@@ -76,7 +85,7 @@ export default function PropertyEditForm({title, properties, router, managers, a
                         name={"properties[" + index + "].accountant"} defaultValue={property.accountant}
                         className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         >
-                        {accountants && accountants.map((accountant) => (
+                        {accountants && accountants.map((accountant: any) => (
                             <option key={accountant.id} value={accountant.id}>{accountant.name}</option>
                         ))}
                     </select>
