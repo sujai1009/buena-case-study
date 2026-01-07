@@ -37,7 +37,7 @@ npm run start (Production run)
 
 Frontend URL : http://localhost:8080
 
-## Docker run:
+## Docker run
 ```aiignore
 docker compose --profile production up -d
 ```
