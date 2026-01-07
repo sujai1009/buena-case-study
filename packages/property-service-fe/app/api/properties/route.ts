@@ -6,12 +6,7 @@ export const allowedPropertyTypes = ["weg", "mv", "all"]
 
 let PROPERTY_API_URL = `http://${process.env.API_HOST}:${process.env.API_PORT}/p`;
 
-console.log("PROPERTY_API_URL=", PROPERTY_API_URL);
-console.log("API_HOST=", process.env.API_HOST);
-console.log("API_PORT=", process.env.API_PORT);
-
 export async function GET(req: any, res: any) {
-  console.log("Request for property GET")
   const url = new URL(req.url);
   const searchParams = new URLSearchParams(url.searchParams);
   const propertyType:any = searchParams.get("propertyType");
@@ -23,7 +18,6 @@ export async function GET(req: any, res: any) {
     );
   }
 
-  console.log("URL::", `${PROPERTY_API_URL}/p?type=${propertyType}`);
   const data = await sendRequest(`${PROPERTY_API_URL}?type=${propertyType}`);
   const porperties = data.data as Property[];
   console.log("Response for property GET=", porperties)
@@ -49,7 +43,6 @@ export async function DELETE(req: any) {
 
 export async function PUT(request: Request) {
   const body = await request.json();
-  console.log("Request for property PUT=", body);
   const res = await sendRequest(`${PROPERTY_API_URL}`, HttpMethods.PUT, JSON.stringify(body));
 
   console.log("Response for property PUT=", res);

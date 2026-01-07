@@ -14,9 +14,7 @@ export const sendRequest = async (
     },
   };
 
-  //console.log("sendRequest,", url)
   return fetch(url, options).then(r => {
-    //console.log("sendRequest response:", r);
     return r.json()
   });
 };
@@ -50,8 +48,8 @@ export const sendFileRequest = async (
   return await fetch(url, options).then(r => r.json());;
 };
 
-export const downloadFile = async (
-  url: string
-) => {
-  return fetch(url).then(r => r.blob());
-};
+// export const downloadFile = async (
+//   url: string
+// ) => {
+//   return fetch(url).then(r => r.blob());
+// };

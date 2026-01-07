@@ -13,7 +13,6 @@ export const BuildingCard: React.FC<{ key:number, building: Building, callDetail
       <p className="text-gray-600">Zipcode : {building.address.code}</p>
       <p className="text-gray-600">Land : {building.address.country}</p>
       <p className="text-gray-600">Property : {building.property.name}</p>
-      {/* <p className="text-gray-600">Units : {building.units.length}</p> */}
       
       <div className="mt-8 flex justify-between items-center text-gray-600">          
         <div className="flex items-center">

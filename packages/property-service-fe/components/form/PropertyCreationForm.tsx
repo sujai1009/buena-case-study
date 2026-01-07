@@ -31,7 +31,6 @@ export default function PropertyCreationForm({title, router, managers, accountan
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
         const data = Object.fromEntries(formData.entries())
-        console.log(data)
         onSubmit(data);
     }
 

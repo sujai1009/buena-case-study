@@ -1,5 +1,5 @@
 'use client'
-import { ChevronDownIcon, PhotoIcon } from '@heroicons/react/16/solid'
+
 import Form from 'next/form';
 import { FormEvent, useState } from 'react';
 import AddressForm from './AddressForm';
@@ -18,7 +18,6 @@ export default function BuildingCreationForm({title, router, propertyId, onSubmi
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
         const data = Object.fromEntries(formData.entries())
-        console.log(data)
         onSubmit(data);
     }
 

@@ -1,6 +1,6 @@
 "use client";
+
 import { createContext, useContext, useState, ReactNode } from "react";
-import { Building, Property, Unit } from "../types/app.types";
 
 interface StoreContextType {
   sharedObject: any;
@@ -19,7 +19,6 @@ export function StoreDataProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom hook for easy access
 export const useStoreContext = () => {
   const context = useContext(StoreContext);
   if (!context) throw new Error("useStoreContext must be used within a DataProvider");

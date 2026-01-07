@@ -2,18 +2,13 @@
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import useSWR from 'swr';
-import PropertyCreationForm from '@/components/form/PropertyCreationForm';
 import { sendRequest } from '@/components/utils/sendRequest';
-import BuildingCreationForm from '@/components/form/BuildingCreationForm';
 import { toast } from 'react-toastify';
-import { detailedDiff } from 'deep-object-diff';
-import UnitCreationForm from '@/components/form/UnitCreationForm';
 import PropertyEditForm from '@/components/form/PropertyEditForm';
 import BuildingEditForm from '@/components/form/BuildingEditForm';
 import UnitEditForm from '@/components/form/UnitEditForm';
 import { Building, Property, Unit } from '@/components/types/app.types';
 import { HttpMethods } from '@/components/types/http.methods';
-import { useState } from 'react';
 import { useStoreContext } from '@/components/provider/store.context.provider';
 
 
@@ -26,7 +21,8 @@ export default function EditEntityForm() {
     const propertyType = searchParams.get('propertyType')
     let propertyId:any = searchParams.get('propertyId')
     let buildingId = searchParams.get('buildingId')
-    console.log("propertyId, buildingId, propertyType", propertyId, buildingId, propertyType);
+
+    console.log("propertyId, buildingId, propertyType", propertyId, buildingId, propertyType, params);
     const type = params.type;
 
     let dataForTable = null;
@@ -50,14 +46,10 @@ export default function EditEntityForm() {
         }
         updationURI = '/api/buildings';
     } else if (type === "property") {
-        // title += 'Property';
-        console.log("Before calling users")
         const userResponse = useSWR('/api/users', sendRequest).data;
-        console.log("UserResponse", userResponse, type);
-
+        
         managers = userResponse && userResponse.filter((user: any) => user.type === 'Manager');
         accountants = userResponse && userResponse.filter((user: any) => user.type === 'Accountant');
-        console.log("sharedObject,", sharedObject);
         if ( sharedObject ) {
             propertyId = sharedObject.id;
             dataForTable = [sharedObject];
@@ -65,7 +57,6 @@ export default function EditEntityForm() {
 
         updationURI = '/api/properties';
     } else if (type === "unit") {
-        // title += 'Units';
         if (buildingId) {
             const { data, error, isLoading } = useSWR<Unit[]>('/api/units?buildingId=' + buildingId, sendRequest)
             if (error) return <div>failed to load units</div>;

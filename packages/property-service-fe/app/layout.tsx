@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
-import { Bounce, ToastContainer } from "react-toastify";
+import { Bounce, Slide, ToastContainer } from "react-toastify";
 import { StoreDataProvider } from "@/components/provider/store.context.provider";
 
 const geistSans = Geist({

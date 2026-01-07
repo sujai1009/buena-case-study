@@ -3,18 +3,19 @@
 import { PropertyCard } from "@/components/ui/property/property-card";
 import useSWR from "swr";
 import { useParams, useRouter } from "next/navigation";
-import { downloadFile, sendRequest } from "@/components/utils/sendRequest";
+import { sendRequest } from "@/components/utils/sendRequest";
 import Button from "@/components/common/Button";
 import { toast } from "react-toastify";
 import { allowedPropertyTypes } from "@/app/api/properties/route";
 import { Property } from "@/components/types/app.types";
 import { useStoreContext } from "@/components/provider/store.context.provider";
-import { HttpMethods } from "@/components/types/http.methods";
 
 export default function AllProperties() {
   const router = useRouter();
   const params = useParams();
   const { setSharedObject } : any = useStoreContext();
+
+  console.log("In Properties page:::", params);
 
   const propertyType:any = params.type;// as unknown as number;
   if (!allowedPropertyTypes.includes(propertyType)) {
@@ -34,9 +35,6 @@ export default function AllProperties() {
   }
 
   async function callDownload(prop: Property) {
-      // console.log("Before calling download property file", prop.aggrementFile.path);
-      // const response = downloadFile("/api/file?path=" + prop.aggrementFile.path);
-
     const response = await fetch(`/api/file?path=${encodeURIComponent(prop.aggrementFile.path)}`);
     const blob = await response.blob();
     const downloadUrl = window.URL.createObjectURL(blob);
@@ -49,17 +47,14 @@ export default function AllProperties() {
 
   async function callEdit(prop: Property) {
       setSharedObject(prop);
-      console.log("Before calling edit property,", prop);
       router.push('/EditEntityForm/property');
   }
 
   async function callDetail(prop: Property) {
-      console.log("Detail called", prop)
       router.push('/Building/' + prop.id);
   }
 
   async function callDelete(prop: Property) {
-      console.log("Delete called", prop)
       const result = window.confirm("Do you want to delete this Property and its buildings and units? Action not revertable. Kindly confirm.");
       
       if (result) {

@@ -30,18 +30,15 @@ export default function AllUnits() {
   }
 
   async function callEdit(prop: Unit) {
-        console.log("Edit called", prop)
         setSharedObject(prop);
         router.push('/EditEntityForm/unit');
   }
 
   async function callDetail(prop: Unit) {
-      console.log("Detail called", prop)
       router.push('/Unit/details/' + prop.id);
   }
 
   async function callDelete(prop: Unit) {
-      console.log("Delete called", prop)
       const result = window.confirm("Do you want to delete this unit? Action not revertable. Kindly confirm.");
       
       if (result) {

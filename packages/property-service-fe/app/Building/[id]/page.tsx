@@ -35,12 +35,10 @@ export default function AllBuildings() {
   }
   
   async function callDetail(prop: Building) {
-      console.log("Detail called", prop)
       router.push('/Unit/' + prop.id);
   }
 
   async function callDelete(prop: Building) {
-      console.log("Delete called", prop)
       const result = window.confirm("Do you want to delete this building and its units? Action not revertable. Kindly confirm.");
       
       if (result) {

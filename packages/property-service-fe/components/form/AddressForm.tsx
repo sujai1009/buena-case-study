@@ -3,7 +3,6 @@ interface Props {
 }
 
 export default function AddressForm({isbulkCreation} : Props) {
-    console.log("AddresForm", isbulkCreation);
     return (
         <>
             <div className="sm:col-span-3">

@@ -7,11 +7,7 @@ import { sendFileRequest, sendRequest } from '@/components/utils/sendRequest';
 import BuildingCreationForm from '@/components/form/BuildingCreationForm';
 import { toast } from 'react-toastify';
 import UnitCreationForm from '@/components/form/UnitCreationForm';
-import PropertyEditForm from '@/components/form/PropertyEditForm';
-import BuildingEditForm from '@/components/form/BuildingEditForm';
-import UnitEditForm from '@/components/form/UnitEditForm';
 import { HttpMethods } from '@/components/types/http.methods';
-
 
 export default function CreateEntityForm() {
     const router = useRouter();
@@ -20,12 +16,11 @@ export default function CreateEntityForm() {
     const propertyType = searchParams.get('propertyType')
     const propertyId = searchParams.get('propertyId')
     const buildingId = searchParams.get('buildingId')
-    console.log("propertyId, buildingId, propertyType", propertyId, buildingId, propertyType);
-    console.log(params);
+    console.log("propertyId, buildingId, propertyType", propertyId, buildingId, propertyType, params);
+
+
     const type = params.type;
-
     let title: string = `Create new ${type}`;
-
     let managers = [];
     let accountants = [];
     let creationURI: string;

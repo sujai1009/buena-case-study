@@ -1,9 +1,7 @@
 'use client'
-import { ChevronDownIcon, PhotoIcon } from '@heroicons/react/16/solid'
+
 import Form from 'next/form';
 import { FormEvent, useState } from 'react';
-import AddressForm from './AddressForm';
-import { Building } from '../types/app.types';
 import { formDataToJson } from "formdata2json";
 
 interface Props {

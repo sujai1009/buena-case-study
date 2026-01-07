@@ -47,4 +47,4 @@ docker compose --profile production up -d
 ## Design
 > The backend model design [Link](https://github.com/sujai1009/buena-case-study/tree/main/design_diagrams)
 > 
-> [An explanation video link](https://github.com/sujai1009/buena-case-study/explanation_video.mov)
+> [An explanation video link](https://github.com/sujai1009/buena-case-study/tree/main/video/Sujai_Buena_case_stydy.mp4)

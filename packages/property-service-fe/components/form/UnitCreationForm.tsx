@@ -2,7 +2,6 @@
 import { ChevronDownIcon, PhotoIcon } from '@heroicons/react/16/solid'
 import Form from 'next/form';
 import { FormEvent, useState } from 'react';
-import AddressForm from './AddressForm';
 
  interface Props {
   title: string;
@@ -12,13 +11,10 @@ import AddressForm from './AddressForm';
  }
 
 export default function UnitCreationForm({title, router, buildingId, onSubmit} : Props) {
-    const [isbulkCreation, setIsbulkCreation] = useState(true)
-    
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
         const data = Object.fromEntries(formData.entries())
-        console.log(data)
         onSubmit(data);
     }
 

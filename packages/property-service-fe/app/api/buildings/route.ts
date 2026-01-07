@@ -8,8 +8,6 @@ export async function GET(req: any) {
   const url = new URL(req.url);
   const searchParams = new URLSearchParams(url.searchParams);
   const propertyId = searchParams.get("propertyId");
-  console.log("Response for building GET=", propertyId)
-  console.log("BUILDING_API_URL=" , BUILDING_API_URL);
   const data = await sendRequest(`${BUILDING_API_URL}?propertyId=${propertyId}`)
   const buildings = data.data as Building[];
   console.log("Response for building GET=", buildings)
