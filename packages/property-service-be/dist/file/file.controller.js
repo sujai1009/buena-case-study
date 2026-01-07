@@ -11,29 +11,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var FileController_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileController = void 0;
 const platform_express_1 = require("@nestjs/platform-express");
 const common_1 = require("@nestjs/common");
 const file_service_1 = require("./file.service");
 const multer_1 = require("multer");
-let FileController = class FileController {
+const swagger_1 = require("@nestjs/swagger");
+let FileController = FileController_1 = class FileController {
     fileService;
+    logger = new common_1.Logger(FileController_1.name);
     constructor(fileService) {
         this.fileService = fileService;
     }
     async create(file) {
-        console.log("FileController", file);
+        this.logger.log("create", file);
         return await this.fileService.createFile(file);
         ;
     }
     findOne(id) {
+        this.logger.log("fineOne ", id);
         return this.fileService.findOne(+id);
     }
 };
 exports.FileController = FileController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Upload a file in to the system.' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Return the row information of the created file' }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
             destination: 'public/aggrement',
@@ -49,12 +55,14 @@ __decorate([
 ], FileController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get the uploaded fine information for the given Id' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Return the file info' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], FileController.prototype, "findOne", null);
-exports.FileController = FileController = __decorate([
+exports.FileController = FileController = FileController_1 = __decorate([
     (0, common_1.Controller)('f'),
     __metadata("design:paramtypes", [file_service_1.FileService])
 ], FileController);

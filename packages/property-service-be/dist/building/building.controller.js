@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var BuildingController_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BuildingController = void 0;
 const common_1 = require("@nestjs/common");
@@ -19,28 +20,34 @@ const create_building_dto_1 = require("./dto/create-building.dto");
 const update_building_dto_1 = require("./dto/update-building.dto");
 const swagger_1 = require("@nestjs/swagger");
 const building_page_request_dto_1 = require("./dto/building-page-request-dto");
-let BuildingController = class BuildingController {
+let BuildingController = BuildingController_1 = class BuildingController {
     buildingService;
+    logger = new common_1.Logger(BuildingController_1.name);
     constructor(buildingService) {
         this.buildingService = buildingService;
     }
     create(createBuildingDto) {
+        this.logger.log("create=", createBuildingDto);
         return this.buildingService.create(createBuildingDto);
     }
     findAll(buildingPage) {
+        this.logger.log("findAll=", buildingPage);
         return this.buildingService.findAll(buildingPage);
     }
     findOne(id) {
+        this.logger.log("findOne=", id);
         return this.buildingService.findOne(+id);
     }
     update(id, updateBuildingDto) {
+        this.logger.log("update=", updateBuildingDto);
         return this.buildingService.update(+id, updateBuildingDto);
     }
     updateMany(updateBuildingDtos) {
+        this.logger.log("updateMany=", updateBuildingDtos);
         return this.buildingService.updateMany(updateBuildingDtos);
     }
     remove(id) {
-        console.log("Deleted sucessfully");
+        this.logger.log("remove=", id);
         return this.buildingService.remove(+id);
     }
 };
@@ -105,7 +112,7 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], BuildingController.prototype, "remove", null);
-exports.BuildingController = BuildingController = __decorate([
+exports.BuildingController = BuildingController = BuildingController_1 = __decorate([
     (0, common_1.Controller)('b'),
     __metadata("design:paramtypes", [building_service_1.BuildingService])
 ], BuildingController);

@@ -1,13 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, Logger } from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { PaginationRequest } from 'src/common/pagination-request-dto';
 import { PropertyPageReq } from './dto/property-page-request-dto';
 
 @Controller('p')
 export class PropertyController {
+  private readonly logger = new Logger(PropertyController.name);
+
   constructor(private readonly propertyService: PropertyService) {}
 
   @Post()
@@ -16,6 +17,7 @@ export class PropertyController {
   @ApiResponse({ status: 201, description: 'The property has been successfully created.'})
   @ApiBody({ type: CreatePropertyDto })
   create(@Body() createPropertyDto: CreatePropertyDto) {
+    this.logger.log("create", createPropertyDto);
     return this.propertyService.create(createPropertyDto);
   }
 
@@ -24,6 +26,7 @@ export class PropertyController {
   @ApiResponse({ status: 201, description: 'Return pageable property data' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   findAll(@Query() paginationRequest: PropertyPageReq) {
+    this.logger.log("findAll", paginationRequest);
     return this.propertyService.findAll(paginationRequest);
   }
 
@@ -32,6 +35,7 @@ export class PropertyController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 201, description: 'List property by id'})
   findOne(@Param('id') id: number) {
+    this.logger.log("findOne ", id);
     return this.propertyService.findOne(+id);
   }
 
@@ -41,6 +45,7 @@ export class PropertyController {
   @ApiResponse({ status: 201, description: 'Update the property with new details'})
   @ApiBody({ type: UpdatePropertyDto })
   update(@Param('id') id: string, @Body() updatePropertyDto: UpdatePropertyDto) {
+    this.logger.log("update ", updatePropertyDto);
     return this.propertyService.update(+id, updatePropertyDto);
   }
 
@@ -50,6 +55,7 @@ export class PropertyController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiBody({ type: [UpdatePropertyDto] })
   updateMany(@Body() updatePropertyDtos: UpdatePropertyDto[]) {
+    this.logger.log("updateMany ", updatePropertyDtos);
     return this.propertyService.updateMany(updatePropertyDtos);
   }
 
@@ -58,6 +64,7 @@ export class PropertyController {
   @ApiResponse({ status: 201, description: 'Delete the property'})
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   remove(@Param('id') id: string) {
+    this.logger.log("remove ", id);
     return this.propertyService.remove(+id);
   }
 }

@@ -15,12 +15,13 @@ export declare class BuildingService {
     private readonly unitService;
     private readonly propertyService;
     private readonly addressService;
+    private readonly logger;
     constructor(buildingRepository: Repository<Building>, unitService: UnitService, propertyService: PropertyService, addressService: AddressService);
     create(createBuildingDto: CreateBuildingDto): Promise<Building | "Building cannot be saved as Property info is null" | null>;
     createMany(totalBuildings: number, property: Property, address: Address): Promise<Building[]>;
     findAll(buildingPage: BuildingPageReq): Promise<PaginationResponse>;
     findOne(id: number): Promise<Building | null>;
-    update(id: number, updateBuildingDto: UpdateBuildingDto): Promise<Building | "No building with id found">;
+    update(id: number, updateBuildingDto: UpdateBuildingDto): Promise<Building>;
     updateMany(updateBuildingDtos: UpdateBuildingDto[]): Promise<Building[]>;
     remove(id: number): Promise<void>;
     createMultipleUnits(totalUnits: number, building: Building): Promise<Unit[]>;

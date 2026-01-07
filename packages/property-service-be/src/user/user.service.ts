@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,40 +8,40 @@ import { UserType } from './entities/user.type';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>
     ) {}
 
   create(createUserDto: CreateUserDto) {
+    this.logger.log("create");
     return 'This action adds a new user';
   }
 
   async findAll() {
-    // const results = await this.userRepository.findBy({ type: In([UserType.Accountant, UserType.Manager]) });
-    // const results = await this.userRepository.find();
-    //console.log("In user service", results);
-    // const mapData = new Map(results.map(obj => [obj.type, obj]))
-    // console.log(mapData)
-    // return mapData;
+    this.logger.log("findAll");
     return await this.userRepository.findBy({ type: In([UserType.Accountant, UserType.Manager]) });
   }
 
   async findUsersByIds(ids: number[]) {
+    this.logger.log("findUsersByIds", ids);
     const results = await this.userRepository.findBy({ id: In(ids) });
     return  new Map(results.map(obj => [obj.id, obj]))
-    //return results;
   }
 
   findOne(id: number) {
+    this.logger.log("findOne");
     return `This action returns a #${id} user`;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
+    this.logger.log("update");
     return `This action updates a #${id} user`;
   }
 
   remove(id: number) {
+    this.logger.log("remove");
     return `This action removes a #${id} user`;
   }
 }

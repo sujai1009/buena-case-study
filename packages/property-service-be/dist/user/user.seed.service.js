@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var UserSeedService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserSeedService = void 0;
 const common_1 = require("@nestjs/common");
@@ -18,13 +19,14 @@ const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("./entities/user.entity");
 const typeorm_2 = require("typeorm");
 const user_type_1 = require("./entities/user.type");
-let UserSeedService = class UserSeedService {
+let UserSeedService = UserSeedService_1 = class UserSeedService {
     userRepository;
+    logger = new common_1.Logger(UserSeedService_1.name);
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
     async onModuleInit() {
-        console.log(`The module has been initialized.`);
+        this.logger.log(`The module has been initialized.`);
         const users = this.getUserData();
         let newUsersToCreate = [];
         for (var i = 0; i < users.length; i++) {
@@ -33,7 +35,7 @@ let UserSeedService = class UserSeedService {
                 newUsersToCreate.push(users[i]);
             }
         }
-        console.log("New users to create", newUsersToCreate);
+        this.logger.log("New users to create", newUsersToCreate);
         if (newUsersToCreate.length > 0) {
             await this.userRepository.insert(newUsersToCreate);
         }
@@ -56,7 +58,7 @@ let UserSeedService = class UserSeedService {
     }
 };
 exports.UserSeedService = UserSeedService;
-exports.UserSeedService = UserSeedService = __decorate([
+exports.UserSeedService = UserSeedService = UserSeedService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository])

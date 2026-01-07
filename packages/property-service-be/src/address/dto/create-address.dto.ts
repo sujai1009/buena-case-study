@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty } from "class-validator";
-import { Address } from "src/address/entities/address.entity";
 
 export class CreateAddressDto {
     @ApiProperty()

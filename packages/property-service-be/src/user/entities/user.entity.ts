@@ -11,9 +11,6 @@ export class User extends BaseId {
     })
     name: string;
 
-    // @Column({
-    //     nullable: false
-    // })
     @Column({
         nullable: false,
         type: 'int',

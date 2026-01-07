@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,8 @@ import { UserType } from './entities/user.type';
 @Injectable()
 export class UserSeedService implements OnModuleInit {
 
+  private readonly logger = new Logger(UserSeedService.name);
+
   constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>
@@ -14,24 +16,19 @@ export class UserSeedService implements OnModuleInit {
 
 
   async onModuleInit() {
-    console.log(`The module has been initialized.`);
+    this.logger.log(`The module has been initialized.`);
 
     const users = this.getUserData();
-    // const userCount = await this.userRepository.count();
-    // console.log("Existing user count:" + userCount);
     let newUsersToCreate:any = [];
 
     for (var i = 0; i < users.length; i++) {
-        const existingUser = await this.userRepository.findBy(users[i]);
-      //console.log(existingUser);
+      const existingUser = await this.userRepository.findBy(users[i]);
       if (existingUser.length == 0) {
-          
           newUsersToCreate.push(users[i]);
-          //console.log("inside if", newUsersToCreate);
         }
     }
 
-    console.log("New users to create",  newUsersToCreate);
+    this.logger.log("New users to create",  newUsersToCreate);
     if (newUsersToCreate.length > 0) {
       await this.userRepository.insert(newUsersToCreate);
     }

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var UnitService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnitService = void 0;
 const common_1 = require("@nestjs/common");
@@ -21,14 +22,16 @@ const building_service_1 = require("../building/building.service");
 const pagination_response_dto_1 = require("../common/pagination-response-dto");
 const unit_type_1 = require("./entities/unit.type");
 const unit_status_1 = require("./entities/unit.status");
-let UnitService = class UnitService {
+let UnitService = UnitService_1 = class UnitService {
     unitRepository;
     buildingService;
+    logger = new common_1.Logger(UnitService_1.name);
     constructor(unitRepository, buildingService) {
         this.unitRepository = unitRepository;
         this.buildingService = buildingService;
     }
     async create(createUnitDto) {
+        this.logger.log("create");
         if (!createUnitDto.buildingId) {
             return "Unit cannot be saved as Building info is null";
         }
@@ -43,6 +46,7 @@ let UnitService = class UnitService {
         return await this.findOne(unit.id);
     }
     async createMany(totalUnits, building) {
+        this.logger.log("createMany");
         let units = [];
         for (var i = 0; i < totalUnits; i++) {
             const type = unit_type_1.UnitType.TEMP_TYPE;
@@ -53,8 +57,8 @@ let UnitService = class UnitService {
         return units;
     }
     async findAll(paginationRequest) {
+        this.logger.log("findAll");
         const { limit = 10, offset = 0 } = paginationRequest;
-        console.log("In Unit Service", paginationRequest);
         const [units, total] = await this.unitRepository.findAndCount({
             relations: {
                 building: true,
@@ -70,19 +74,21 @@ let UnitService = class UnitService {
         return pagination_response_dto_1.PaginationResponse.getPageable(units, total, limit, offset);
     }
     findOne(id) {
+        this.logger.log("findOne");
         return this.unitRepository.findOneBy({ id });
     }
     async update(id, updateUnitDto) {
+        this.logger.log("update");
         const unit = await this.findOne(id);
         if (!unit) {
-            return "No unit with id found";
+            throw new common_1.NotFoundException("No unit with id found id=" + id);
         }
         Object.assign(unit, updateUnitDto);
         await this.unitRepository.save(unit);
         return await this.findOne(id);
     }
     async updateMany(updateUnitDtos) {
-        console.log("in updateMany");
+        this.logger.log("updateMany");
         const ids = updateUnitDtos.map(d => d.id);
         const units = await this.unitRepository.findBy({ id: (0, typeorm_2.In)(ids) });
         const map = new Map(updateUnitDtos.map(d => [d.id, d]));
@@ -95,11 +101,12 @@ let UnitService = class UnitService {
         });
     }
     async remove(id) {
+        this.logger.log("remove");
         await this.unitRepository.delete(id);
     }
 };
 exports.UnitService = UnitService;
-exports.UnitService = UnitService = __decorate([
+exports.UnitService = UnitService = UnitService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(unit_entity_1.Unit)),
     __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => building_service_1.BuildingService))),

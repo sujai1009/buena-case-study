@@ -13,7 +13,6 @@ export class Property extends BaseId {
     })
     name: string;
 
-    //@Column("enum", { enum: PropertyType })
     @Column({
         type: 'int',
         transformer: {
@@ -23,19 +22,13 @@ export class Property extends BaseId {
     })
     type: PropertyType;
 
-    //@ManyToOne(() => User, (user) => user.managers, { eager: true })
     @ManyToOne(() => User, (user) => user.managers)
     @JoinColumn({ name: 'manager_id' })
     manager: User;
 
-    //@ManyToOne(() => User, (user) => user.accountants, { eager: true })
     @ManyToOne(() => User, (user) => user.accountants)
     @JoinColumn({ name: 'accountant_id' })
     accountant: User;
-
-    // @OneToOne(() => User)
-    // @JoinColumn({ name: 'accountant_id' })
-    // accountant: User;
 
     @OneToMany(() => Building, (building) => building.property)
     buildings: Building[];
@@ -43,7 +36,4 @@ export class Property extends BaseId {
     @OneToOne(() => UploadFile, { onDelete: "CASCADE" })
     @JoinColumn({ name: 'file_id' })
     aggrementFile: UploadFile;
-
-    // @OneToMany(() => Building, (building) => building.property, { lazy: true})
-    // buildings: Promise<Building[]>;
 }

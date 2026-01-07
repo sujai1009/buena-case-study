@@ -1,22 +1,22 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from './entities/address.entity';
 import { CreatePropertyDto } from 'src/property/dto/create-property.dto';
-import { BuildingService } from 'src/building/building.service';
 import { CreateBuildingDto } from 'src/building/dto/create-building.dto';
 
 @Injectable()
 export class AddressService {
 
+  private readonly logger = new Logger(AddressService.name);
+
   constructor(
       @InjectRepository(Address)
-      private readonly addressRepository: Repository<Address>,
-      //@Inject(forwardRef(() => BuildingService)) private readonly buildingService: BuildingService,
+      private readonly addressRepository: Repository<Address>
   ) {}
 
   async createFromBuildingDto(createBuildingDto: CreateBuildingDto) {
-    console.log(createBuildingDto);
+    this.logger.log("createFromBuildingDto=", createBuildingDto);
     const address = new Address();
     address.street = createBuildingDto.street;
     address.city = createBuildingDto.city;
@@ -27,6 +27,7 @@ export class AddressService {
   }
 
   async createFromPropertyDto(createPropertyDto: CreatePropertyDto) {
+    this.logger.log("createFromPropertyDto=", createPropertyDto);
     const address = new Address();
     address.street = createPropertyDto.street;
     address.city = createPropertyDto.city;
@@ -37,27 +38,22 @@ export class AddressService {
   }
 
   async findOrCreateAddress(address: Address): Promise<Address> {
-    // 1. Try to find the user by email
+    this.logger.log("findOrCreateAddress=", address);
     const addressFound = await this.addressRepository.findOneBy({ ...address });
-
-    // 2. If found, return it; otherwise, create and save a new one
     if (addressFound) {
         return addressFound;
     } else {
-        // Create a new user object with provided data and email
         const newAddress = this.addressRepository.create({ ...address });
         return this.addressRepository.save(newAddress);
     }
-}
+  }
 
 
   findAll() {
-    //return `This action returns all property`;
     return this.addressRepository.find();
   }
 
   findOne(id: number) {
-    //return `This action returns a #${id} property`;
     return this.addressRepository.findOneBy({id});
   }
 

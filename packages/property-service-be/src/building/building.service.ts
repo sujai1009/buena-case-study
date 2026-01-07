@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { Building } from './entities/building.entity';
@@ -15,6 +15,8 @@ import { AddressService } from 'src/address/address.service';
 
 @Injectable()
 export class BuildingService {
+  private readonly logger = new Logger(BuildingService.name);
+
   constructor(
       @InjectRepository(Building)
       private buildingRepository: Repository<Building>,
@@ -24,6 +26,7 @@ export class BuildingService {
   ) {}
 
   async create(createBuildingDto: CreateBuildingDto) {
+    this.logger.log("create=", createBuildingDto);
     if (!createBuildingDto.propertyId) {
       return "Building cannot be saved as Property info is null";
     }
@@ -39,7 +42,6 @@ export class BuildingService {
     building.name = createBuildingDto.name;
     building.houseNumber = createBuildingDto.houseNumber;
     building.address = address;
-    //building.manager = users[createBuildingDto.manager];
 
     await this.buildingRepository.save(building);
 
@@ -52,9 +54,17 @@ export class BuildingService {
   }
 
   async createMany(totalBuildings: number, property: Property, address: Address): Promise<Building[]> {
+    this.logger.log("createMany");
     let buildings= [] as Building[];
+
+    const result = await this.buildingRepository.find({
+      order: { id: 'DESC' },
+      take: 1,
+    });
+    const maxId = result.length > 0 ? result[0].id : 0;
+
     for(var i=0; i< totalBuildings; i++) {
-      const houseNumber = i + 1 + "";
+      const houseNumber = maxId + i + 1 + "";
       const name = "TEMP_BUILDING_NAME_" + houseNumber;
       buildings.push(await this.buildingRepository.create({ houseNumber, name, property, address}));
     }
@@ -65,8 +75,7 @@ export class BuildingService {
 
   async findAll(buildingPage: BuildingPageReq) : Promise<PaginationResponse> {
     const { limit = 10, offset = 0 } = buildingPage;
-
-    console.log("In Building Service", buildingPage);
+    this.logger.log("findAll ", buildingPage);
 
     const [buildings, total] = await this.buildingRepository.findAndCount({
       relations: {
@@ -87,6 +96,7 @@ export class BuildingService {
   }
 
   async findOne(id: number) {
+    this.logger.log("findOne")
     return await this.buildingRepository.findOne({
       where: { id },
       relations: {
@@ -98,9 +108,10 @@ export class BuildingService {
   }
 
   async update(id: number, updateBuildingDto: UpdateBuildingDto) {
+    this.logger.log("update")
     const building = await this.findOne(id);
     if ( !building) {
-      return "No building with id found"; // Throw exception later
+      throw new NotFoundException("No building with id found id=" + id);
     }
     Object.assign(building, updateBuildingDto);
     await this.buildingRepository.save(building);
@@ -110,12 +121,11 @@ export class BuildingService {
       await this.buildingRepository.save(building);
     }
 
-    //return await this.findOne(id);
     return building;
   }
 
   async updateMany(updateBuildingDtos: UpdateBuildingDto[]) {
-    console.log("in updateMany")
+    this.logger.log("updateMany")
     const ids = updateBuildingDtos.map(d => d.id);
     const buildings = await this.buildingRepository.findBy({ id: In(ids) });
     const map = new Map(updateBuildingDtos.map(d => [d.id, d]));
@@ -131,10 +141,12 @@ export class BuildingService {
   }
 
   async remove(id: number): Promise<void> {
+    this.logger.log("remove")
     await this.buildingRepository.delete(id);
   }
 
   async createMultipleUnits(totalUnits: number, building: Building): Promise<Unit[]> {
+    this.logger.log("createMultipleUnits")
     return await this.unitService.createMany(totalUnits, building);
   }
 }

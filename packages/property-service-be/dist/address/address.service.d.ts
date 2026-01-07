@@ -4,6 +4,7 @@ import { CreatePropertyDto } from 'src/property/dto/create-property.dto';
 import { CreateBuildingDto } from 'src/building/dto/create-building.dto';
 export declare class AddressService {
     private readonly addressRepository;
+    private readonly logger;
     constructor(addressRepository: Repository<Address>);
     createFromBuildingDto(createBuildingDto: CreateBuildingDto): Promise<Address>;
     createFromPropertyDto(createPropertyDto: CreatePropertyDto): Promise<Address>;

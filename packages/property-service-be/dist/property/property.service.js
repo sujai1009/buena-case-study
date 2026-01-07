@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var PropertyService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PropertyService = void 0;
 const common_1 = require("@nestjs/common");
@@ -23,12 +24,13 @@ const address_service_1 = require("../address/address.service");
 const pagination_response_dto_1 = require("../common/pagination-response-dto");
 const property_type_1 = require("./entities/property.type");
 const file_service_1 = require("../file/file.service");
-let PropertyService = class PropertyService {
+let PropertyService = PropertyService_1 = class PropertyService {
     propertyRepository;
     buildingService;
     userService;
     addressService;
     fileService;
+    logger = new common_1.Logger(PropertyService_1.name);
     constructor(propertyRepository, buildingService, userService, addressService, fileService) {
         this.propertyRepository = propertyRepository;
         this.buildingService = buildingService;
@@ -37,14 +39,13 @@ let PropertyService = class PropertyService {
         this.fileService = fileService;
     }
     async create(createPropertyDto) {
+        this.logger.log("create ", createPropertyDto);
         const users = await this.userService.findUsersByIds([createPropertyDto.manager, createPropertyDto.accountant]);
-        console.log("Property service create", createPropertyDto);
         const property = new property_entity_1.Property();
         if (createPropertyDto.fileId) {
-            console.log("Property service create if", createPropertyDto);
+            this.logger.log("File present to update ", createPropertyDto.fileId);
             const aggrementFile = await this.fileService.findOne(createPropertyDto.fileId);
             (aggrementFile ? property.aggrementFile = aggrementFile : null);
-            console.log("Property", property);
         }
         property.name = createPropertyDto.name;
         property.type = createPropertyDto.type;
@@ -59,8 +60,8 @@ let PropertyService = class PropertyService {
         return await this.findOne(property.id);
     }
     async findAll(paginationRequest) {
+        this.logger.log("findAll");
         const { limit = 10, offset = 0 } = paginationRequest;
-        console.log("In Property service ..", paginationRequest);
         let whereClause = {};
         const type = paginationRequest.type;
         if (type) {
@@ -82,6 +83,7 @@ let PropertyService = class PropertyService {
         return pagination_response_dto_1.PaginationResponse.getPageable(properties, total, limit, offset);
     }
     findOne(id) {
+        this.logger.log("findOne");
         return this.propertyRepository.findOne({
             where: { id },
             relations: {
@@ -90,9 +92,10 @@ let PropertyService = class PropertyService {
         });
     }
     async update(id, updatePropertyDto) {
+        this.logger.log("update ", id, updatePropertyDto);
         const property = await this.findOne(id);
         if (!property) {
-            return "No Property with id found";
+            throw new common_1.NotFoundException("No Property with id found," + id);
         }
         if (updatePropertyDto.fileId && property.aggrementFile.id != updatePropertyDto.fileId) {
             const aggrementFile = await this.fileService.findOne(updatePropertyDto.fileId);
@@ -103,7 +106,7 @@ let PropertyService = class PropertyService {
         return property;
     }
     async updateMany(updatePropertyDtos) {
-        console.log("in updateMany");
+        this.logger.log("updateMany ", updatePropertyDtos);
         const ids = updatePropertyDtos.map(d => d.id);
         const units = await this.propertyRepository.findBy({ id: (0, typeorm_2.In)(ids) });
         const map = new Map(updatePropertyDtos.map(d => [d.id, d]));
@@ -116,14 +119,16 @@ let PropertyService = class PropertyService {
         });
     }
     async remove(id) {
+        this.logger.log("remove ", id);
         await this.propertyRepository.delete(id);
     }
     async createMultipleBuildings(totalBuildings, property, address) {
+        this.logger.log("createMultipleBuildings");
         return await this.buildingService.createMany(totalBuildings, property, address);
     }
 };
 exports.PropertyService = PropertyService;
-exports.PropertyService = PropertyService = __decorate([
+exports.PropertyService = PropertyService = PropertyService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(property_entity_1.Property)),
     __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => building_service_1.BuildingService))),

@@ -5,7 +5,6 @@ export class PaginationResponse {
   offset : number;
   nextPage : number;
 
-  //nextPage: total > offset + limit ? offset + limit : null,
   public static getPageable(data, total, limit, offset) {
     const pageData = new PaginationResponse();
     pageData.data = data;

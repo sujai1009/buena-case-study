@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var PropertyController_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PropertyController = void 0;
 const common_1 = require("@nestjs/common");
@@ -19,27 +20,34 @@ const create_property_dto_1 = require("./dto/create-property.dto");
 const update_property_dto_1 = require("./dto/update-property.dto");
 const swagger_1 = require("@nestjs/swagger");
 const property_page_request_dto_1 = require("./dto/property-page-request-dto");
-let PropertyController = class PropertyController {
+let PropertyController = PropertyController_1 = class PropertyController {
     propertyService;
+    logger = new common_1.Logger(PropertyController_1.name);
     constructor(propertyService) {
         this.propertyService = propertyService;
     }
     create(createPropertyDto) {
+        this.logger.log("create", createPropertyDto);
         return this.propertyService.create(createPropertyDto);
     }
     findAll(paginationRequest) {
+        this.logger.log("findAll", paginationRequest);
         return this.propertyService.findAll(paginationRequest);
     }
     findOne(id) {
+        this.logger.log("findOne ", id);
         return this.propertyService.findOne(+id);
     }
     update(id, updatePropertyDto) {
+        this.logger.log("update ", updatePropertyDto);
         return this.propertyService.update(+id, updatePropertyDto);
     }
     updateMany(updatePropertyDtos) {
+        this.logger.log("updateMany ", updatePropertyDtos);
         return this.propertyService.updateMany(updatePropertyDtos);
     }
     remove(id) {
+        this.logger.log("remove ", id);
         return this.propertyService.remove(+id);
     }
 };
@@ -108,7 +116,7 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PropertyController.prototype, "remove", null);
-exports.PropertyController = PropertyController = __decorate([
+exports.PropertyController = PropertyController = PropertyController_1 = __decorate([
     (0, common_1.Controller)('p'),
     __metadata("design:paramtypes", [property_service_1.PropertyService])
 ], PropertyController);

@@ -1,5 +1,5 @@
 import { BaseId } from "src/common/base-id";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity } from "typeorm";
 
 @Entity()
 export class UploadFile extends BaseId {

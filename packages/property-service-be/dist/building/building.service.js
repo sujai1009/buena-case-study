@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var BuildingService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BuildingService = void 0;
 const common_1 = require("@nestjs/common");
@@ -21,11 +22,12 @@ const unit_service_1 = require("../unit/unit.service");
 const property_service_1 = require("../property/property.service");
 const pagination_response_dto_1 = require("../common/pagination-response-dto");
 const address_service_1 = require("../address/address.service");
-let BuildingService = class BuildingService {
+let BuildingService = BuildingService_1 = class BuildingService {
     buildingRepository;
     unitService;
     propertyService;
     addressService;
+    logger = new common_1.Logger(BuildingService_1.name);
     constructor(buildingRepository, unitService, propertyService, addressService) {
         this.buildingRepository = buildingRepository;
         this.unitService = unitService;
@@ -33,6 +35,7 @@ let BuildingService = class BuildingService {
         this.addressService = addressService;
     }
     async create(createBuildingDto) {
+        this.logger.log("create=", createBuildingDto);
         if (!createBuildingDto.propertyId) {
             return "Building cannot be saved as Property info is null";
         }
@@ -54,9 +57,15 @@ let BuildingService = class BuildingService {
         return await this.findOne(building.id);
     }
     async createMany(totalBuildings, property, address) {
+        this.logger.log("createMany");
         let buildings = [];
+        const result = await this.buildingRepository.find({
+            order: { id: 'DESC' },
+            take: 1,
+        });
+        const maxId = result.length > 0 ? result[0].id : 0;
         for (var i = 0; i < totalBuildings; i++) {
-            const houseNumber = i + 1 + "";
+            const houseNumber = maxId + i + 1 + "";
             const name = "TEMP_BUILDING_NAME_" + houseNumber;
             buildings.push(await this.buildingRepository.create({ houseNumber, name, property, address }));
         }
@@ -65,7 +74,7 @@ let BuildingService = class BuildingService {
     }
     async findAll(buildingPage) {
         const { limit = 10, offset = 0 } = buildingPage;
-        console.log("In Building Service", buildingPage);
+        this.logger.log("findAll ", buildingPage);
         const [buildings, total] = await this.buildingRepository.findAndCount({
             relations: {
                 property: true,
@@ -82,6 +91,7 @@ let BuildingService = class BuildingService {
         return pagination_response_dto_1.PaginationResponse.getPageable(buildings, total, limit, offset);
     }
     async findOne(id) {
+        this.logger.log("findOne");
         return await this.buildingRepository.findOne({
             where: { id },
             relations: {
@@ -92,9 +102,10 @@ let BuildingService = class BuildingService {
         });
     }
     async update(id, updateBuildingDto) {
+        this.logger.log("update");
         const building = await this.findOne(id);
         if (!building) {
-            return "No building with id found";
+            throw new common_1.NotFoundException("No building with id found id=" + id);
         }
         Object.assign(building, updateBuildingDto);
         await this.buildingRepository.save(building);
@@ -105,7 +116,7 @@ let BuildingService = class BuildingService {
         return building;
     }
     async updateMany(updateBuildingDtos) {
-        console.log("in updateMany");
+        this.logger.log("updateMany");
         const ids = updateBuildingDtos.map(d => d.id);
         const buildings = await this.buildingRepository.findBy({ id: (0, typeorm_1.In)(ids) });
         const map = new Map(updateBuildingDtos.map(d => [d.id, d]));
@@ -118,14 +129,16 @@ let BuildingService = class BuildingService {
         });
     }
     async remove(id) {
+        this.logger.log("remove");
         await this.buildingRepository.delete(id);
     }
     async createMultipleUnits(totalUnits, building) {
+        this.logger.log("createMultipleUnits");
         return await this.unitService.createMany(totalUnits, building);
     }
 };
 exports.BuildingService = BuildingService;
-exports.BuildingService = BuildingService = __decorate([
+exports.BuildingService = BuildingService = BuildingService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_2.InjectRepository)(building_entity_1.Building)),
     __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => unit_service_1.UnitService))),

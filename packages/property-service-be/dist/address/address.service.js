@@ -11,19 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var AddressService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddressService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const address_entity_1 = require("./entities/address.entity");
-let AddressService = class AddressService {
+let AddressService = AddressService_1 = class AddressService {
     addressRepository;
+    logger = new common_1.Logger(AddressService_1.name);
     constructor(addressRepository) {
         this.addressRepository = addressRepository;
     }
     async createFromBuildingDto(createBuildingDto) {
-        console.log(createBuildingDto);
+        this.logger.log("createFromBuildingDto=", createBuildingDto);
         const address = new address_entity_1.Address();
         address.street = createBuildingDto.street;
         address.city = createBuildingDto.city;
@@ -32,6 +34,7 @@ let AddressService = class AddressService {
         return await this.findOrCreateAddress(address);
     }
     async createFromPropertyDto(createPropertyDto) {
+        this.logger.log("createFromPropertyDto=", createPropertyDto);
         const address = new address_entity_1.Address();
         address.street = createPropertyDto.street;
         address.city = createPropertyDto.city;
@@ -40,6 +43,7 @@ let AddressService = class AddressService {
         return await this.findOrCreateAddress(address);
     }
     async findOrCreateAddress(address) {
+        this.logger.log("findOrCreateAddress=", address);
         const addressFound = await this.addressRepository.findOneBy({ ...address });
         if (addressFound) {
             return addressFound;
@@ -63,7 +67,7 @@ let AddressService = class AddressService {
     }
 };
 exports.AddressService = AddressService;
-exports.AddressService = AddressService = __decorate([
+exports.AddressService = AddressService = AddressService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(address_entity_1.Address)),
     __metadata("design:paramtypes", [typeorm_2.Repository])

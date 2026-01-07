@@ -11,36 +11,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var FileService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileService = void 0;
 const common_1 = require("@nestjs/common");
 const upload_file_entity_1 = require("./entities/upload.file.entity");
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
-let FileService = class FileService {
+let FileService = FileService_1 = class FileService {
     fileRepository;
+    logger = new common_1.Logger(FileService_1.name);
     constructor(fileRepository) {
         this.fileRepository = fileRepository;
     }
     async createFile(file) {
+        this.logger.log("createFile");
         const uploadFile = new upload_file_entity_1.UploadFile();
         uploadFile.name = file.filename;
         uploadFile.originalname = file.originalname;
         uploadFile.path = file.path;
         uploadFile.size = file.size;
         await this.fileRepository.save(uploadFile);
-        console.log("file service=", uploadFile);
         return await this.findOne(uploadFile.id);
     }
     async findOne(id) {
+        this.logger.log("fineOne");
         return await this.fileRepository.findOneBy({ id });
     }
     async remove(id) {
+        this.logger.log("remove");
         await this.fileRepository.delete(id);
     }
 };
 exports.FileService = FileService;
-exports.FileService = FileService = __decorate([
+exports.FileService = FileService = FileService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_2.InjectRepository)(upload_file_entity_1.UploadFile)),
     __metadata("design:paramtypes", [typeorm_1.Repository])

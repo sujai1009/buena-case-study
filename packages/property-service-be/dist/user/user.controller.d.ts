@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 export declare class UserController {
     private readonly userService;
+    private readonly logger;
     constructor(userService: UserService);
     create(createUserDto: CreateUserDto): string;
     findAll(): Promise<import("./entities/user.entity").User[]>;

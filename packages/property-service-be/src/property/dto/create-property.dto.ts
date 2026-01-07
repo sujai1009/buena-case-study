@@ -1,6 +1,5 @@
 
 import { ApiProperty } from "@nestjs/swagger";
-import { Property } from "../entities/property.entity";
 import { PropertyType } from "../entities/property.type";
 import { IsEnum, IsNotEmpty } from 'class-validator';
 

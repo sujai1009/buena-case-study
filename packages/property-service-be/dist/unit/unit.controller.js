@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var UnitController_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnitController = void 0;
 const common_1 = require("@nestjs/common");
@@ -19,27 +20,34 @@ const create_unit_dto_1 = require("./dto/create-unit.dto");
 const update_unit_dto_1 = require("./dto/update-unit.dto");
 const swagger_1 = require("@nestjs/swagger");
 const unit_page_request_dto_1 = require("./dto/unit-page-request-dto");
-let UnitController = class UnitController {
+let UnitController = UnitController_1 = class UnitController {
     unitService;
+    logger = new common_1.Logger(UnitController_1.name);
     constructor(unitService) {
         this.unitService = unitService;
     }
     create(createUnitDto) {
+        this.logger.log("create");
         return this.unitService.create(createUnitDto);
     }
     findAll(paginationRequest) {
+        this.logger.log("findAll", paginationRequest);
         return this.unitService.findAll(paginationRequest);
     }
     findOne(id) {
+        this.logger.log("findOne", id);
         return this.unitService.findOne(+id);
     }
     update(id, updateUnitDto) {
+        this.logger.log("update", id, updateUnitDto);
         return this.unitService.update(+id, updateUnitDto);
     }
     updateMany(updateUnitDtos) {
+        this.logger.log("updateMany", updateUnitDtos);
         return this.unitService.updateMany(updateUnitDtos);
     }
     remove(id) {
+        this.logger.log("remove", id);
         return this.unitService.remove(+id);
     }
 };
@@ -100,7 +108,7 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UnitController.prototype, "remove", null);
-exports.UnitController = UnitController = __decorate([
+exports.UnitController = UnitController = UnitController_1 = __decorate([
     (0, common_1.Controller)('u'),
     __metadata("design:paramtypes", [unit_service_1.UnitService])
 ], UnitController);

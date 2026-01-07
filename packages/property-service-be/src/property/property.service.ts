@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,16 +9,16 @@ import { UserService } from 'src/user/user.service';
 import { AddressService } from 'src/address/address.service';
 import { Address } from 'src/address/entities/address.entity';
 import { Building } from 'src/building/entities/building.entity';
-import { PaginationRequest } from 'src/common/pagination-request-dto';
 import { PaginationResponse } from 'src/common/pagination-response-dto';
 import { User } from 'src/user/entities/user.entity';
 import { PropertyPageReq } from './dto/property-page-request-dto';
 import { PropertyType } from './entities/property.type';
 import { FileService } from 'src/file/file.service';
-import { UploadFile } from 'src/file/entities/upload.file.entity';
 
 @Injectable()
 export class PropertyService {
+
+  private readonly logger = new Logger(PropertyService.name);
 
   constructor(
       @InjectRepository(Property)
@@ -30,14 +30,14 @@ export class PropertyService {
   ) {}
 
   async create(createPropertyDto: CreatePropertyDto) {
+    this.logger.log("create ", createPropertyDto);
     const users = await this.userService.findUsersByIds([createPropertyDto.manager, createPropertyDto.accountant]);
-    console.log("Property service create", createPropertyDto);
+    
     const property = new Property();
     if(createPropertyDto.fileId) {
-      console.log("Property service create if", createPropertyDto);
+        this.logger.log("File present to update ", createPropertyDto.fileId);
         const aggrementFile = await this.fileService.findOne(createPropertyDto.fileId);
         (aggrementFile ? property.aggrementFile = aggrementFile : null);
-        console.log("Property", property);
     }
 
     property.name = createPropertyDto.name;
@@ -57,9 +57,9 @@ export class PropertyService {
   }
 
   async findAll(paginationRequest: PropertyPageReq) : Promise<PaginationResponse> {
+    this.logger.log("findAll");
     const { limit = 10, offset = 0 } = paginationRequest;
 
-    console.log("In Property service ..", paginationRequest);
     let whereClause = {};
     const type = paginationRequest.type;
     if (type) { 
@@ -84,7 +84,7 @@ export class PropertyService {
   }
 
   findOne(id: number) {
-    //return this.propertyRepository.findOneBy({ id });
+    this.logger.log("findOne");
     return this.propertyRepository.findOne({
       where: { id },
       relations: {
@@ -94,31 +94,25 @@ export class PropertyService {
   }
 
   async update(id: number, updatePropertyDto: UpdatePropertyDto) {
+    this.logger.log("update ", id, updatePropertyDto);
     const property = await this.findOne(id);
     if ( !property) {
-      return "No Property with id found"; // Throw exception later
+      throw new NotFoundException("No Property with id found," + id);
     }
 
     if(updatePropertyDto.fileId && property.aggrementFile.id != updatePropertyDto.fileId) {
         const aggrementFile = await this.fileService.findOne(updatePropertyDto.fileId);
         (aggrementFile ? property.aggrementFile = aggrementFile : null);
     }
-    
+  
     Object.assign(property, updatePropertyDto);
-
     await this.propertyRepository.save(property);
-
-    // TODO need to have address info
-    // if (updatePropertyDto.isbulkCreation && updatePropertyDto.totalBuildings) {
-    //   property.buildings = await this.createMultipleBuildings(updatePropertyDto.totalBuildings, property);
-    //   await this.propertyRepository.save(property);
-    // }
 
     return property;
   }
 
   async updateMany(updatePropertyDtos: UpdatePropertyDto[]) {
-      console.log("in updateMany")
+    this.logger.log("updateMany ", updatePropertyDtos);
       const ids = updatePropertyDtos.map(d => d.id);
       const units = await this.propertyRepository.findBy({ id: In(ids) });
       const map = new Map(updatePropertyDtos.map(d => [d.id, d]));
@@ -134,10 +128,12 @@ export class PropertyService {
     }
 
   async remove(id: number): Promise<void> {
+    this.logger.log("remove ", id);
     await this.propertyRepository.delete(id);
   }
 
   async createMultipleBuildings(totalBuildings: number, property: Property, address: Address): Promise<Building[]> {
+    this.logger.log("createMultipleBuildings");
     return await this.buildingService.createMany(totalBuildings, property, address);
   }
 }

@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty } from "class-validator";
-import { CreateAddressDto } from "src/address/dto/create-address.dto";
 
 export class CreateBuildingDto {
     @ApiProperty()
@@ -15,10 +14,6 @@ export class CreateBuildingDto {
     @IsNotEmpty()
     houseNumber: string;
 
-    // @ApiProperty()
-    // @IsNotEmpty()
-    // address: CreateAddressDto;
-
     @ApiProperty()
     street: string;
 
@@ -32,7 +27,6 @@ export class CreateBuildingDto {
     zipcode: number;
 
     @ApiProperty()
-    //@IsNotEmpty()
     manager: number;
 
     @ApiProperty()

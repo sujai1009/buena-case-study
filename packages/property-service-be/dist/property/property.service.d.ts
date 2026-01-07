@@ -16,11 +16,12 @@ export declare class PropertyService {
     private readonly userService;
     private readonly addressService;
     private readonly fileService;
+    private readonly logger;
     constructor(propertyRepository: Repository<Property>, buildingService: BuildingService, userService: UserService, addressService: AddressService, fileService: FileService);
     create(createPropertyDto: CreatePropertyDto): Promise<Property | null>;
     findAll(paginationRequest: PropertyPageReq): Promise<PaginationResponse>;
     findOne(id: number): Promise<Property | null>;
-    update(id: number, updatePropertyDto: UpdatePropertyDto): Promise<Property | "No Property with id found">;
+    update(id: number, updatePropertyDto: UpdatePropertyDto): Promise<Property>;
     updateMany(updatePropertyDtos: UpdatePropertyDto[]): Promise<Property[]>;
     remove(id: number): Promise<void>;
     createMultipleBuildings(totalBuildings: number, property: Property, address: Address): Promise<Building[]>;

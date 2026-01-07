@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseConfiguration = void 0;
+const common_1 = require("@nestjs/common");
 const typeorm_naming_strategies_1 = require("typeorm-naming-strategies");
 class DatabaseConfiguration {
+    logger = new common_1.Logger(DatabaseConfiguration.name);
     createTypeOrmOptions() {
         const typeOrmConfig = {
             type: process.env.TYPEORM_DATABASE_TYPE,
@@ -18,8 +20,7 @@ class DatabaseConfiguration {
             autoLoadEntities: Boolean(process.env.TYPEORM_AUTO_LOAD_ENTITIES) || false,
             namingStrategy: new typeorm_naming_strategies_1.SnakeNamingStrategy(),
         };
-        console.log(typeOrmConfig);
-        console.log(process.env.NODE_ENV);
+        this.logger.log(typeOrmConfig);
         return typeOrmConfig;
     }
 }

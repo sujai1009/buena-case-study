@@ -2,7 +2,7 @@ import { Address } from "src/address/entities/address.entity";
 import { BaseId } from "src/common/base-id";
 import { Property } from "src/property/entities/property.entity";
 import { Unit } from "src/unit/entities/unit.entity";
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
 
 @Entity()

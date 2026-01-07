@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 export declare class UserService {
     private readonly userRepository;
+    private readonly logger;
     constructor(userRepository: Repository<User>);
     create(createUserDto: CreateUserDto): string;
     findAll(): Promise<User[]>;
