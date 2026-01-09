@@ -39,11 +39,21 @@ Frontend URL : http://localhost:8080
 
 ## Docker run
 ```aiignore
+cd tools/docker
 docker compose --profile production up -d
 ```
+
+## Terraform Runner
+Prerequisite: Install terraform based on the OS
+```aiignore
+cd tools/terraform
+terraform init
+terraform plan
+terraform apply
+```
+
 > All the necessary images are built and the application will run the same above mentioned ports
-
-
+> 
 ## Design
 > The backend model design [Link](https://github.com/sujai1009/buena-case-study/tree/main/design_diagrams)
 > 
