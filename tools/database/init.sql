@@ -1,0 +1,1 @@
+CREATE SCHEMA IF NOT EXISTS property_db1;
