@@ -52,7 +52,7 @@ services:
     # Production Profile
   property-service-be-prod:
     build:
-      context: .
+      context: ../../.
       dockerfile: packages/property-service-be/Dockerfile
       target: production
     profiles:
@@ -70,7 +70,7 @@ services:
 
   property-service-fe-prod:
     build:
-      context: .
+      context: ../../.
       dockerfile: packages/property-service-fe/Dockerfile
       target: production
     profiles:
@@ -94,7 +94,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
       - buenaNetwork

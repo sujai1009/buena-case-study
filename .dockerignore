@@ -1,0 +1,42 @@
+# Nestjs specific
+/dist
+/node_modules
+/build
+/tmp
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# dotenv environment variable files
+.env
+.env.development
+.env.test
+.env.production
+
+# temp directory
+.temp
+.tmp
+.idea
+.gitignore
+.dockerignore
+/.terraform
+/infra/*
+/infra_1/*
+/infra_2/*
+/design_diagrams
+README.md
+/docker-transform
+test_declaration_of_division.pdf
+init.sql
+docker-compose.yaml
+Dockerfile.dev
+/video
+/test
+LICENSE
+/tools
